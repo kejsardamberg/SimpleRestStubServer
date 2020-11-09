@@ -1,5 +1,5 @@
 # SimpleRestStubServer
-Actual home page, with screenshots, here: http://damberg.one/alster/work/reststubserver/stubserver.html
+Actual home page, with DOWNLOAD and screenshots, here: http://damberg.one/alster/work/reststubserver/stubserver.html
 
 ## Introduction
 A system rarely stands on its own. It almost always have integrations to other systems. When testing a system of your own it's easy to use mocks while running unit tests, but when rising to system testing level you need the external systems to respond. A problem with this is that you don't know if the external systems are in sync with you with their functionality, and another challenge is that it's ofter cumbersome and hard to prepare data into the external systems so you can test your own system properly. This is of course extra hard for negative testing, with rare error conditions. 
@@ -16,7 +16,7 @@ This is a java utility to be ran as stand-alone. You point your system under tes
 
 ## Getting started
 ### Steps:
-* Download the utility and place it somewhere on your system. It's beneficial if it's in a folder where you have permanent write access to the file system since percistance of stub responses is made to the same folder.
+* Download the utility and place it somewhere on your system. It's beneficial if it's in a folder where you have permanent write access to the file system since percistance of stub responses is made to the same folder. Actual home page, with DOWNLOAD and screenshots, here: http://damberg.one/alster/work/reststubserver/stubserver.html
 * Start the server
 * Open your web browser to the given admin URL and start configure the stub responses
 
@@ -133,7 +133,6 @@ The following filters are implemented:
 * Expand the body options to include possiblities to modify the prepared response body at runtime, for timestamps and more.
 * Prettify the XML or JSON data.
 * Finish flaky HTTP Header management for prepared responses.
-* Upload to GitHub
 * Test with OpenJRE.
 * Fix bug so you shouldn't have to refresh page after DELETE
 * Create more tests for ease of changes.
