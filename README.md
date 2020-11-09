@@ -44,19 +44,25 @@ You notice the server is running since it is producing a text like this:
 Now point your web browser to the given admin URL to configure the utility behaviour.
 
 First you'll see a list of registered responses. 
+![Screenshot](http://damberg.one/alster/work/reststubserver/list.JPG)
+
 To add more responses, just click the Add... button.
+![Screenshot](http://damberg.one/alster/work/reststubserver/add1.jpg)
 
 You may customize both the response and parameters for when to use exactly this response. The filter part is dynamic and its fields are dependent on the type of filter selected.
 
-You may also choose that the response body should be read from file by the stub server at runtime.
+You may also choose that the response body should be read from file by the stub server at runtime. To do this, switch the Resonse body content type to 'file': 
+![Screenshot](http://damberg.one/alster/work/reststubserver/file.JPG)
 
 This file path is of-course given in a stub server perspective, and need to be readable from the stub server.
 
 When you start adding HTTP headers or filters, they get listed in their respective section. 
+![Screenshot](http://damberg.one/alster/work/reststubserver/add.jpg)
 
 For the response you may choose status code (default is 200), body context (default is blank), and HTTP headers (default are no extra headers).
 
 As filters for when to apply which response you can combine a range of filters:
+![Screenshot](http://damberg.one/alster/work/reststubserver/filters.JPG)
 
  When you change filter type, a short description get visible to explain the effects of this filter.
  
