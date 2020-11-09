@@ -1,5 +1,5 @@
 # SimpleRestStubServer
-Actual home page, with DOWNLOAD and screenshots, here: http://damberg.one/alster/work/reststubserver/stubserver.html
+Actual home page, with __DOWNLOAD__ and screenshots, here: http://damberg.one/alster/work/reststubserver/stubserver.html
 
 ## Introduction
 A system rarely stands on its own. It almost always have integrations to other systems. When testing a system of your own it's easy to use mocks while running unit tests, but when rising to system testing level you need the external systems to respond. A problem with this is that you don't know if the external systems are in sync with you with their functionality, and another challenge is that it's ofter cumbersome and hard to prepare data into the external systems so you can test your own system properly. This is of course extra hard for negative testing, with rare error conditions. 
