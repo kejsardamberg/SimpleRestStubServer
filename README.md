@@ -3,6 +3,7 @@ Actual home page, with DOWNLOAD and screenshots, here: http://damberg.one/alster
 
 ## Introduction
 A system rarely stands on its own. It almost always have integrations to other systems. When testing a system of your own it's easy to use mocks while running unit tests, but when rising to system testing level you need the external systems to respond. A problem with this is that you don't know if the external systems are in sync with you with their functionality, and another challenge is that it's ofter cumbersome and hard to prepare data into the external systems so you can test your own system properly. This is of course extra hard for negative testing, with rare error conditions. 
+![Stubbing explained](http://damberg.one/alster/work/reststubserver/stub.JPG)
 
 This utility is meant to be able to substitute any REST integration for your system.
 
@@ -16,9 +17,9 @@ This is a java utility to be ran as stand-alone. You point your system under tes
 
 ## Getting started
 ### Steps:
-* Download the utility and place it somewhere on your system. It's beneficial if it's in a folder where you have permanent write access to the file system since percistance of stub responses is made to the same folder. Actual home page, with DOWNLOAD and screenshots, here: http://damberg.one/alster/work/reststubserver/stubserver.html
-* Start the server
-* Open your web browser to the given admin URL and start configure the stub responses
+1. Download the utility and place it somewhere on your system. It's beneficial if it's in a folder where you have permanent write access to the file system since percistance of stub responses is made to the same folder. Actual home page, with DOWNLOAD and screenshots, here: http://damberg.one/alster/work/reststubserver/stubserver.html
+1. Start the server
+1. Open your web browser to the given admin URL and start configure the stub responses
 
 ### Starting the server
 You start the executable jar that you downloaded with the following command:
@@ -120,13 +121,13 @@ If no filters are given, the server responds with the prepared response unless i
 If several prepared responses matches the filters the first applicable one is sent.
 
 The following filters are implemented:
-* Request body contains string (if the request body contains the given string, the response is sent)
-* Request body regex match (if the request body matches the given pattern, the response is sent)
-* URL End-point equals (if the request URL path equals the given string, the response is sent)
-* Header exist (if the request has a header with a name that equals the given string, the response is sent)
-* Header value (if the request body contains the given header, equal in both name and value, the response is sent)
-* Origin URL host equals (if the request Origin header matches, the response is sent)
-* HTTP verb/method equals (case-insensitive match towards the request HTTP method, like GET, POST, PUT, DELETE)
+* __Request body contains string__ (if the request body contains the given string, the response is sent)
+* __Request body regex match__ (if the request body matches the given pattern, the response is sent)
+* __URL End-point equals__ (if the request URL path equals the given string, the response is sent)
+* __Header exist__ (if the request has a header with a name that equals the given string, the response is sent)
+* __Header value__ (if the request body contains the given header, equal in both name and value, the response is sent)
+* __Origin URL host equals_ (if the request Origin header matches, the response is sent)
+* __HTTP verb/method equals__ (case-insensitive match towards the request HTTP method, like GET, POST, PUT, DELETE)
 
 ## List of future improvement ideas
 * Include a HTTP client to enable a proxy mode for recording (and to test your own filter mechaisms while creating new prepared responses).
