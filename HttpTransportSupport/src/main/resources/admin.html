@@ -443,8 +443,8 @@
             }
             var filter = {};
             filter.type = triggertype;
-            if(triggertype != 'next') filter.field1 = document.getElementById('field1').value;
-            if(triggertype == 'headervalue') filter.field2 = document.getElementById('field2').value;
+            filter.field1 = document.getElementById('field1').value;
+            filter.field2 = document.getElementById('field2').value;
             preparedStatement.filters.push(filter);
             updateFilterList();
         }
@@ -474,10 +474,18 @@
             div.innerHTML = innertext;
         }
 
+        function uuidv4() {
+          return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+          });
+        }
+
         function reset() {
             document.getElementById('new').style.display = 'none';
             document.getElementById('addPreparedResponse').style.display = 'block';
             preparedStatement = {};
+            preparedStatement.id = uuidv4();
             preparedStatement.httpResponse = {};
             preparedStatement.httpResponse.headers = [];
             preparedStatement.filters = [];
@@ -515,6 +523,8 @@
                 var triggertype = document.getElementById('triggertype').value;
                 switch(triggertype) {
                     case 'NextResponse':
+                        document.getElementById('field1').value = "";
+                        document.getElementById('field2').value = "";
                         document.getElementById('field1label').innerHTML = "";
                         document.getElementById('field1label').style.display = 'none';
                         document.getElementById('field1').style.display = 'none';
@@ -524,6 +534,8 @@
                         document.getElementById('triggertypedescription').innerHTML = 'Sends the request above once only, as the next server response.';
                         break;
                     case 'OriginUrlFilter':
+                        document.getElementById('field1').value = "";
+                        document.getElementById('field2').value = "";
                         var xhttp = new XMLHttpRequest();
                         xhttp.onreadystatechange = function () {
                             if (this.readyState == 4 && this.status == 200) {
@@ -544,6 +556,8 @@
                         document.getElementById('triggertypedescription').innerHTML = 'Checks the Origin header for the incomming request and if it matches the registered response is sent.';
                         break;
                     case 'EndpointUrlFilter':
+                        document.getElementById('field1').value = "";
+                        document.getElementById('field2').value = "";
                         document.getElementById('field1label').innerHTML = "End-point path (e.g. '/api/v1/resourses/persons'):";
                         document.getElementById('field1label').style.display = 'block';
                         document.getElementById('field1').style.display = 'block';
@@ -553,6 +567,8 @@
                         document.getElementById('triggertypedescription').innerHTML = 'Parses the end-point path of the incoming request. If it matches the registered response is sent.';
                         break;
                     case 'HeaderExistFilter':
+                        document.getElementById('field1').value = "";
+                        document.getElementById('field2').value = "";
                         document.getElementById('field1label').innerHTML = "Header name to exist:";
                         document.getElementById('field1label').style.display = 'block';
                         document.getElementById('field1').style.display = 'block';
@@ -562,6 +578,8 @@
                         document.getElementById('triggertypedescription').innerHTML = 'Checks if the header with the given name is found on the incoming request. If it does the registered response is sent.';
                         break;
                     case 'HeaderValueFilter':
+                        document.getElementById('field1').value = "";
+                        document.getElementById('field2').value = "";
                         document.getElementById('field1label').innerHTML = "Header name:";
                         document.getElementById('field1label').style.display = 'block';
                         document.getElementById('field1').style.display = 'block';
@@ -571,6 +589,8 @@
                         document.getElementById('triggertypedescription').innerHTML = 'Checks the incoming request for a header matching the given parameters. If it does the registered response is sent.';
                         break;
                     case 'BodyRegexMatchFilter':
+                        document.getElementById('field1').value = "";
+                        document.getElementById('field2').value = "";
                         document.getElementById('field1label').innerHTML = "Regular expression pattern for match:";
                         document.getElementById('field1label').style.display = 'block';
                         document.getElementById('field1').style.display = 'block';
@@ -580,6 +600,8 @@
                         document.getElementById('triggertypedescription').innerHTML = 'Matches the incoming request body with the given pattern. If a match is found the registered response is sent.';
                         break;
                     case 'HttpMethodVerbFilter':
+                        document.getElementById('field1').value = "";
+                        document.getElementById('field2').value = "";
                         document.getElementById('field1label').innerHTML = "HTTP request verb to match:";
                         document.getElementById('field1label').style.display = 'block';
                         document.getElementById('field1').style.display = 'block';
@@ -589,6 +611,8 @@
                         document.getElementById('triggertypedescription').innerHTML = 'Checks the incoming request body if the given verb (GET, POST, DELETE, PUT, etc.) matches this field value. If a match is found the registered response is sent.';
                         break;
                     case 'BodyContainsMatchFilter':
+                        document.getElementById('field1').value = "";
+                        document.getElementById('field2').value = "";
                         document.getElementById('field1label').innerHTML = "String to find:";
                         document.getElementById('field1label').style.display = 'block';
                         document.getElementById('field1').style.display = 'block';
@@ -598,6 +622,8 @@
                         document.getElementById('triggertypedescription').innerHTML = 'Checks the incoming request body if it contains the given string. If a match is found the registered response is sent.';
                         break;
                     default:
+                        document.getElementById('field1').value = "";
+                        document.getElementById('field2').value = "";
                         document.getElementById('field1label').innerHTML = "Oups. This should not happen...!";
                         document.getElementById('field1label').style.display = 'block';
                         document.getElementById('field1').style.display = 'block';
@@ -628,7 +654,7 @@
 
 <body onload='init()'>
 <h1>Service virtualization server admin GUI</h1>
-<span class="version">Version 1.1.1</span><br>
+<span class="version">Version 1.1.2</span><br>
 <div id="help" onclick="document.getElementById('help').style.display = 'none';">
     <h2>Concepts</h2>
     <p>

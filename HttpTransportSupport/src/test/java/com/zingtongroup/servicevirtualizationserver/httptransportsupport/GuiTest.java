@@ -127,12 +127,28 @@ public class GuiTest extends ServerTestBase {
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(response, new EndpointUrlFilter("/dummy")));
         driver.get("http://127.0.0.1:" + PORT + "/admin");
         int count = RegisteredPreparedHttpResponses.getInstance().registeredResponses.size();
-        WebDriverWait wait = new WebDriverWait(driver, 100);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(responseTable).findElement(By.tagName("button"))));
         driver.findElement(responseTable).findElement(By.tagName("button")).click();
         driver.switchTo().alert().accept();
         Thread.sleep(100);
         Assert.assertTrue(RegisteredPreparedHttpResponses.getInstance().registeredResponses.size() == count - 1);
+    }
+
+    @Test
+    public void deleteButtonShouldDeleteResponsesRegisteredFromGui() throws InterruptedException {
+        RegisteredPreparedHttpResponses.getInstance().registeredResponses.clear();
+        driver.get("http://127.0.0.1:" + PORT + "/admin");
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        driver.findElement(addButton).click();
+        Assert.assertTrue(RegisteredPreparedHttpResponses.getInstance().registeredResponses.size() == 0);
+        driver.findElement(submitNewPreparedButton).click();
+        wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(responseTable).findElement(By.tagName("button"))));
+        Assert.assertTrue(String.valueOf(RegisteredPreparedHttpResponses.getInstance().registeredResponses.size()), RegisteredPreparedHttpResponses.getInstance().registeredResponses.size() == 1);
+        driver.findElement(responseTable).findElement(By.tagName("button")).click(); //DELETE button
+        driver.switchTo().alert().accept(); //Confirm dialog
+        Thread.sleep(100);
+        Assert.assertTrue(RegisteredPreparedHttpResponses.getInstance().registeredResponses.size() == 0);
     }
 
     @Test

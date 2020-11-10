@@ -11,28 +11,102 @@
       "value" : "text/plain"
     } ]
   },
-  "id" : "2da66ed6-330d-4050-91b5-5cc4ed89d452",
+  "id" : "51eaf9f3-5acb-4bc9-90de-28a51267928d",
   "filters" : [ {
     "field1" : "/test",
     "field2" : null,
-    "type" : "EndpointUrlFilter",
-    "description" : "End-point equals '/test'"
+    "description" : "End-point equals '/test'",
+    "type" : "EndpointUrlFilter"
+  } ]
+}, {
+  "httpResponse" : {
+    "responseCode" : 404,
+    "httpRequest" : null,
+    "body" : "",
+    "bodyFilePath" : null,
+    "uri" : null,
+    "bodyType" : "direct",
+    "headers" : [ {
+      "name" : "apikey",
+      "value" : "asdfasdfu"
+    } ]
+  },
+  "id" : "86081703-0afb-474f-9203-41e6215176d3",
+  "filters" : [ {
+    "field1" : "GET",
+    "field2" : "",
+    "description" : "Request method equals 'GET'.",
+    "type" : "HttpMethodVerbFilter"
+  }, {
+    "field1" : "apikey",
+    "field2" : "asdfasdfu",
+    "description" : "Request header value 'apikey'='asdfasdfu'",
+    "type" : "HeaderValueFilter"
   } ]
 }, {
   "httpResponse" : {
     "responseCode" : 200,
     "httpRequest" : null,
-    "body" : "helloworldcontent.txt",
+    "body" : "",
     "bodyFilePath" : null,
+    "uri" : null,
+    "bodyType" : "direct",
+    "headers" : [ ]
+  },
+  "id" : "8463b04e-2dd2-406b-b9b5-ad7136b45fb6",
+  "filters" : [ {
+    "field1" : "POST",
+    "field2" : "asdfasdfu",
+    "description" : "Request method equals 'POST'.",
+    "type" : "HttpMethodVerbFilter"
+  }, {
+    "field1" : "/persons",
+    "field2" : "asdfasdfu",
+    "description" : "End-point equals '/persons'",
+    "type" : "EndpointUrlFilter"
+  } ]
+}, {
+  "httpResponse" : {
+    "responseCode" : 200,
+    "httpRequest" : null,
+    "body" : "<xml><person><name>Mr Smith</name><id>123</id></person>",
+    "bodyFilePath" : null,
+    "uri" : null,
+    "bodyType" : "direct",
+    "headers" : [ ]
+  },
+  "id" : "f28a8058-be6d-4ee4-8f91-3e6dd1084194",
+  "filters" : [ {
+    "field1" : "/persons/123",
+    "field2" : "asdfasdfu",
+    "description" : "End-point equals '/persons/123'",
+    "type" : "EndpointUrlFilter"
+  }, {
+    "field1" : "GET",
+    "field2" : "asdfasdfu",
+    "description" : "Request method equals 'GET'.",
+    "type" : "HttpMethodVerbFilter"
+  } ]
+}, {
+  "httpResponse" : {
+    "responseCode" : 200,
+    "httpRequest" : null,
+    "body" : null,
+    "bodyFilePath" : "issues.txt",
     "uri" : null,
     "bodyType" : "file",
     "headers" : [ ]
   },
-  "id" : null,
+  "id" : "6a1b0da0-5c1f-4adb-a8a4-9e761fd999ed",
   "filters" : [ {
-    "field1" : "",
-    "field2" : null,
-    "type" : "NextResponse",
-    "description" : "com.zingtongroup.servicevirtualizationserver.httptransportsupport.requestfilters.NextResponse@1287961"
+    "field1" : "GET",
+    "field2" : "",
+    "description" : "Request method equals 'GET'.",
+    "type" : "HttpMethodVerbFilter"
+  }, {
+    "field1" : "/issues",
+    "field2" : "",
+    "description" : "End-point equals '/issues'",
+    "type" : "EndpointUrlFilter"
   } ]
 } ]
