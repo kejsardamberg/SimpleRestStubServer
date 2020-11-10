@@ -25,11 +25,11 @@ This is a java utility to be ran as stand-alone. You point your system under tes
 ### Starting the server
 You start the executable jar that you downloaded with the following command:
 
-     java.exe -jar Stub_v1.0.0.jar
+     java.exe -jar Stub_v1.1.2.jar
       
 Optionally you may enter a port of your choice as argument, like so:
 
-    java.exe -jar Stub_v1.0.0.jar 8023
+    java.exe -jar Stub_v1.1.2.jar 8023
         
 You notice the server is running since it is producing a text like this:
 
