@@ -46,7 +46,7 @@ Now point your web browser to the given admin URL to configure the utility behav
 
 First you'll see a list of registered responses. 
 
-![Screenshot](http://damberg.one/alster/work/reststubserver/list.JPG)
+![Screenshot](http://damberg.one/alster/work/reststubserver/list.JPG?v=2)
 
 To add more responses, just click the Add... button.
 
