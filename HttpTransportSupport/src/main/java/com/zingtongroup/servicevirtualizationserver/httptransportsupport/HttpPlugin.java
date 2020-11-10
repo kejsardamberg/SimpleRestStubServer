@@ -20,8 +20,12 @@ public class HttpPlugin implements Plugin {
     private Thread serverThread;
 
     public HttpPlugin(Integer port){
+        this(port, true);
+    }
+
+    public HttpPlugin(Integer port, boolean instatiateFromFile){
         if(port != null) PORT = port;
-        RegisteredPreparedHttpResponses.getInstance().initiateFromFile();
+        if(instatiateFromFile)  RegisteredPreparedHttpResponses.getInstance().initiateFromFile();
         if(RegisteredPreparedHttpResponses.getInstance().registeredResponses.size() == 0){
             HttpResponseToSend  responseToSend = new HttpResponseToSend(200, "Hello world");
             responseToSend.headers.add(new HttpHeader("Content-Type", "text/plain"));

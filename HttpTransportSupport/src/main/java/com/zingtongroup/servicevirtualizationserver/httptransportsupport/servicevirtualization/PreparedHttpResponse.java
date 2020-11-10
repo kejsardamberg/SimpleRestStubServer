@@ -33,7 +33,8 @@ public class PreparedHttpResponse implements PreparedResponse<HttpResponseToSend
     public boolean isMatch(HttpRequest httpRequest){
         for(HttpRequestFilter filter : filters){
             filter.setHttpRequestForMatch(httpRequest);
-            if(!filter.isMatch())return false;
+            if(!filter.isMatch())
+                return false;
         }
         return true;
     }

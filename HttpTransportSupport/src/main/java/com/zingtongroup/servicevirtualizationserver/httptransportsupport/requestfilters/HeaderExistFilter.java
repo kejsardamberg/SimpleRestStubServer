@@ -14,7 +14,7 @@ public class HeaderExistFilter extends HttpRequestFilter {
 
     @JsonIgnore
     public boolean isMatch() {
-        return request != null && request.getHeaders().get(field1) != null;
+        return request != null && request.getHeaders().get(field1.trim()) != null;
     }
 
     @Override

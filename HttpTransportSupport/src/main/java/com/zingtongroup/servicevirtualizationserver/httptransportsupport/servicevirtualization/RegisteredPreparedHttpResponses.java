@@ -84,19 +84,22 @@ public class RegisteredPreparedHttpResponses {
     }
 
 
-    public void addFromJson(String json) {
+    public String addFromJson(String json) {
         System.out.println("Parsing json to PreparedHttpResponse: " + json);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
+        mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
         try {
             PreparedHttpResponse preparedHttpResponse = mapper.readValue(json, PreparedHttpResponse.class);
             this.add(preparedHttpResponse);
+            return mapper.writeValueAsString(preparedHttpResponse);
         } catch (JsonProcessingException e) {
             System.out.println(e.toString());
             this.add(new PreparedHttpResponse(new HttpResponseToSend(200, json), new NextResponse()));
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public static RegisteredPreparedHttpResponses getInstance()

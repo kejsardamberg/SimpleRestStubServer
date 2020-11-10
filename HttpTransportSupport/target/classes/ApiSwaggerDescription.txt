@@ -1,0 +1,97 @@
+swagger: "2.0"
+info:
+  description: "Simple stub server for REST calls."
+  version: "1.0.0"
+  title: "Stub"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "jorgen.damberg@zingtongroup.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "petstore.swagger.io"
+basePath: "/v2"
+tags:
+- name: "Stub API"
+  description: "Managing registered prepared responses"
+schemes:
+- "http"
+paths:
+  /api:
+    post:
+      tags:
+      - "api"
+      summary: "Add a prepared response"
+      description: "Add a prepared response"
+      operationId: "addResponse"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "PreparedHttpResponse object to add to server list of PreparedHttpResponses."
+        required: true
+        schema:
+          $ref: "#/definitions/PreparedResponse"
+      responses:
+        "200":
+          description: "OK"
+        "500":
+          description: "Internal server error (probably JSON parsing)"
+    get:
+      tags:
+      - "api"
+      summary: "Retrieve all registered prepared HTTP responses, with their filters."
+      description: "Get all registered responses"
+      operationId: "getResponses"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "OK"
+definitions:
+  Filter:
+    type: "object"
+    properties:
+      filterType:
+        type: "string"
+        description: "Filter short name for server side recognition. Normaly: 'next', 'origin', 'headervalue', 'headername', 'bodycontains', 'bodyregex' or 'endpoint'."
+      field1:
+        type: "string"
+      field2:
+        type: "string"
+  Header:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      value:
+        type: "string"
+  PreparedResponse:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "UUID for identification."
+      body:
+        type: "string"
+        description: "Body content for the prepared response."
+      filters:
+        type: "array"
+        description: "Trigger filters for when to send this response."
+        default: "['next']"
+        items:
+          $ref: "#/definitions/Filter"
+      bodyType:
+        type: "string"
+        description: "'direct' or 'file' depending on if the body value should be treated as a file path to a file to use as body or if the body string should be considered the body content for the prepared response."
+      responseCode:
+        type: "integer"
+        format: "int32"
+        description: "HTTP response code for the prepared response."
+      headers:
+        type: "array"
+        description: "HTTP header list for prepared response."
+        items:
+          $ref: "#/definitions/Header"
+

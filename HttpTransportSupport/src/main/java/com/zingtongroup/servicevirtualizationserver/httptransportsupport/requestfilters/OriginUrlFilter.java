@@ -14,6 +14,8 @@ public class OriginUrlFilter extends HttpRequestFilter {
 
     @JsonIgnore
     public boolean isMatch() {
+        System.out.println("Origin url: '" + request.getOriginUrl() + "'");
+        System.out.println("Origin:     '" + field1 + "'");
         return request != null && request.getOriginUrl() != null && request.getOriginUrl().equals(field1);
     }
 

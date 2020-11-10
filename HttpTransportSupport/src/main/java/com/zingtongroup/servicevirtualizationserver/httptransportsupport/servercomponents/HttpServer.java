@@ -37,8 +37,8 @@ public class HttpServer implements Runnable{
 
             request = identifyRequest();
             System.out.println("Received request:" + System.lineSeparator() + request.toString());
-
             sendAdminPageIfApplicable();
+            sendIpIfRequested();
             tendApiIfApplicable();
             sendAnyRegisteredNextResponse();
             sendMatchingRegisteredResponse();
@@ -59,6 +59,13 @@ public class HttpServer implements Runnable{
             if (verbose) {
                 System.out.println("Connection closed.\n");
             }
+        }
+    }
+
+    private void sendIpIfRequested() throws IOException {
+        if(request.getUrl().toLowerCase().equals("/api/ip")){
+            sent = true;
+            send(request.getOriginUrl(), out, dataOut, null);
         }
     }
 
@@ -91,7 +98,7 @@ public class HttpServer implements Runnable{
             if(colonPosition < 0) continue;
             String name = line.substring(0, colonPosition);
             String value = line.substring(colonPosition + 1);
-            request.getHeaders().put(name, value);
+            request.getHeaders().put(name.trim(), value.trim());
         }
         return request;
     }
@@ -115,6 +122,7 @@ public class HttpServer implements Runnable{
             for(PreparedHttpResponse preparedHttpResponse : RegisteredPreparedHttpResponses.getInstance().registeredResponses){
                 if(sent) break;
                 if(preparedHttpResponse.isMatch(request)){
+                    sent = true;
                     System.out.println("Sending prepared statement since match is found");
                     if((preparedHttpResponse.getResponse().body() == null ||
                             preparedHttpResponse.getResponse().body().length() == 0) &&
@@ -136,7 +144,6 @@ public class HttpServer implements Runnable{
                         preparedHttpResponse.setHttpRequestForResponse(request);
                     }
                     sendResponse(out, dataOut, preparedHttpResponse);
-                    sent = true;
                 }
             }
         }
@@ -168,8 +175,9 @@ public class HttpServer implements Runnable{
                 sent = true;
             } else if(request.getVerb().equals("POST")){
                 System.out.println("Received new prepared HTTP response.");
-                RegisteredPreparedHttpResponses.getInstance().addFromJson(request.getBody());
-                sendReceivedNotification(out, dataOut);
+                String body = request.getBody();
+                String responseBody = RegisteredPreparedHttpResponses.getInstance().addFromJson(body);
+                sendReceivedNotification(out, dataOut, responseBody);
                 sent = true;
             } else if(request.getVerb().equals("DELETE") && request.getBody().matches("\\{\"id\":\".*\"\\}")){
                 String id = request.getBody().substring(7, request.getBody().length() - 2);
@@ -212,9 +220,8 @@ public class HttpServer implements Runnable{
         out.flush(); // flush character output stream buffer
     }
 
-    private void sendReceivedNotification(PrintWriter out, OutputStream dataOut) throws IOException {
-        String html = "<status>ok</status>";
-        send(html, out, dataOut, null);
+    private void sendReceivedNotification(PrintWriter out, OutputStream dataOut, String body) throws IOException {
+        send(body, out, dataOut, null);
     }
 
     private void send(String body, PrintWriter out, OutputStream dataOut, Map<String, String> headers) throws IOException {
@@ -260,9 +267,12 @@ public class HttpServer implements Runnable{
         }
         out.println("Content-length: " + fileData.length);
         out.println(); // blank line between headers and content, very important !
+        /*
         if(response.getResponse().body() != null){
+            //out.println(fileData);
             out.println(response.getResponse().body());
         }
+         */
         out.flush(); // flush character output stream buffer
 
         dataOut.write(fileData, 0, fileData.length);

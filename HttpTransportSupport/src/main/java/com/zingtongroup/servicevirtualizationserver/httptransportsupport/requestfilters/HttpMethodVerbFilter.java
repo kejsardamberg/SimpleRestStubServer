@@ -15,16 +15,10 @@ public class HttpMethodVerbFilter extends HttpRequestFilter {
     @JsonIgnore
     @Override
     public boolean isMatch() {
-        if(field1 == null)return false;
-        return request != null &&
+        return field1 != null &&
+                request != null &&
                 request.getVerb() != null &&
-                request
-                        .getVerb()
-                        .toUpperCase()
-                        .trim()
-                        .equals(field1
-                                .toUpperCase()
-                                .trim());
+                request.getVerb().toUpperCase().trim().equals(field1.toUpperCase().trim());
     }
 
     @Override

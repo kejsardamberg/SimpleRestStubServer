@@ -14,7 +14,10 @@ public class EndpointUrlFilter extends HttpRequestFilter {
 
     @JsonIgnore
     public boolean isMatch() {
-        return request != null && request.getUrl() != null && request.getUrl().equals(field1);
+        return field1 != null &&
+                request != null &&
+                request.getUrl() != null &&
+                request.getUrl().equals(field1);
     }
 
     @Override

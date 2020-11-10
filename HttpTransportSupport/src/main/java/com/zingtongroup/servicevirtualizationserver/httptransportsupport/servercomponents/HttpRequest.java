@@ -61,8 +61,15 @@ public class HttpRequest implements Inbound {
     @JsonIgnore
     public String getOriginUrl(){
         for(String key : headers.keySet()){
-            if(!key.toLowerCase().equals("origin")) continue;
-            return headers.get(key);
+            if(key.toLowerCase().equals("host") )
+                return headers.get(key).trim();
+        }
+        for(String key : headers.keySet()){
+            if(key.toLowerCase().equals("origin"))
+                return headers.get(key).split("//")[1].split("/")[0].trim();
+        }
+        for(String key : headers.keySet()){
+            if(key.toLowerCase().equals("referer")) return headers.get(key).split("//")[1].split("/")[0].trim();
         }
         return null;
     }
