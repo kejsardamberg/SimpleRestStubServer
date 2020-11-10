@@ -19,11 +19,11 @@ public class ResponseMethodFilterTest extends ServerTestBase {
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(responseToSend, new HttpMethodVerbFilter("GET"), new EndpointUrlFilter(("/festivities"))));
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(postResponseToSend, new HttpMethodVerbFilter("POST"), new EndpointUrlFilter(("/festivities"))));
 
-        String postResponse = this.postAndGetResponse("{dummy}", "/festivities");
+        String postResponse = this.postAndGetResponse("{dummy}", "/festivities").body;
         Assert.assertFalse(postResponse.equals("Hello gorgeous"));
         Assert.assertTrue(postResponse, postResponse.equals("Hello ugly"));
 
-        String response = getAndGetResponse("/festivities");
+        String response = getAndGetResponse("/festivities").body;
         Assert.assertFalse(response.equals("Hello ugly" ));
         Assert.assertTrue(response.equals("Hello gorgeous" ));
     }

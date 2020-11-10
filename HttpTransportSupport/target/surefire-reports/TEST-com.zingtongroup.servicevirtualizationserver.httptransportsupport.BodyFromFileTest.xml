@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="8" failures="0" name="com.zingtongroup.servicevirtualizationserver.httptransportsupport.GuiTest" time="63.061" errors="0" skipped="1">
+<testsuite tests="2" failures="0" name="com.zingtongroup.servicevirtualizationserver.httptransportsupport.BodyFromFileTest" time="0.102" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2020.2.3"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
@@ -64,14 +64,6 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.zingtongroup.servicevirtualizationserver.httptransportsupport.GuiTest" name="accessGui" time="7.884"/>
-  <testcase classname="com.zingtongroup.servicevirtualizationserver.httptransportsupport.GuiTest" name="registerPortShouldWork" time="7.344"/>
-  <testcase classname="com.zingtongroup.servicevirtualizationserver.httptransportsupport.GuiTest" name="listOfRegisteredShouldShowValues" time="8.237"/>
-  <testcase classname="com.zingtongroup.servicevirtualizationserver.httptransportsupport.GuiTest" name="pressAddPreparedResponseShouldOpenAdditionGui" time="7.029"/>
-  <testcase classname="com.zingtongroup.servicevirtualizationserver.httptransportsupport.GuiTest" name="deleteButtonShouldDelete" time="8.756"/>
-  <testcase classname="com.zingtongroup.servicevirtualizationserver.httptransportsupport.GuiTest" name="addEmptyHeaderShouldMarkRed" time="8.758">
-    <skipped/>
-  </testcase>
-  <testcase classname="com.zingtongroup.servicevirtualizationserver.httptransportsupport.GuiTest" name="helpGuiOpenAndClose" time="6.962"/>
-  <testcase classname="com.zingtongroup.servicevirtualizationserver.httptransportsupport.GuiTest" name="registeringFileBasedResponseBodyShouldWorkFromGui" time="8.091"/>
+  <testcase classname="com.zingtongroup.servicevirtualizationserver.httptransportsupport.BodyFromFileTest" name="responseBodyFromFileShouldBeSentIfPosted" time="0.09"/>
+  <testcase classname="com.zingtongroup.servicevirtualizationserver.httptransportsupport.BodyFromFileTest" name="responseBodyAsFileShouldBeSentIfRegistered" time="0.012"/>
 </testsuite>

@@ -17,7 +17,7 @@ public class BodyRegexMatchFilterTest extends ServerTestBase {
     public void bodyRegexMatchShouldRespond() throws IOException {
         RegisteredPreparedHttpResponses.getInstance().registeredResponses.clear();
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(new HttpResponseToSend(200, "Yes"), new BodyRegexMatchFilter(".*This.*")));
-        String response = postAndGetResponse("Anything and This of course", "/sdaaasdg");
+        String response = postAndGetResponse("Anything and This of course", "/sdaaasdg").body;
         Assert.assertTrue(response.equals("Yes"));
     }
 
@@ -25,7 +25,7 @@ public class BodyRegexMatchFilterTest extends ServerTestBase {
     public void bodyDoNotMatchRegexShouldNotReturnResponse() throws IOException {
         RegisteredPreparedHttpResponses.getInstance().registeredResponses.clear();
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(new HttpResponseToSend(200, "Yes"), new BodyRegexMatchFilter(".*This.*")));
-        String response = postAndGetResponse("Anything but that of course", "/sdaaasdg");
+        String response = postAndGetResponse("Anything but that of course", "/sdaaasdg").body;
         Assert.assertFalse(response.equals("Yes"));
     }
 

@@ -16,7 +16,7 @@ public class EndpointUrlFilterTest extends ServerTestBase {
     public void correctEndpointShouldReturnResponse() throws FileNotFoundException {
         RegisteredPreparedHttpResponses.getInstance().registeredResponses.clear();
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(new HttpResponseToSend(200, "Hey"), new EndpointUrlFilter("/superman")));
-        String response = getAndGetResponse("/superman");
+        String response = getAndGetResponse("/superman").body;
         Assert.assertTrue(response, "Hey".equals(response));
     }
 
@@ -25,7 +25,7 @@ public class EndpointUrlFilterTest extends ServerTestBase {
         RegisteredPreparedHttpResponses.getInstance().registeredResponses.clear();
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(new HttpResponseToSend(200, "Hey"), new EndpointUrlFilter("/superman")));
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(new HttpResponseToSend(200, "Nay"), new EndpointUrlFilter("/superman2")));
-        String response = getAndGetResponse("/superman");
+        String response = getAndGetResponse("/superman").body;
         System.out.println("Response '" + response + "'");
         Assert.assertTrue(response, response.equals("Hey" ));
     }
@@ -35,10 +35,10 @@ public class EndpointUrlFilterTest extends ServerTestBase {
         RegisteredPreparedHttpResponses.getInstance().registeredResponses.clear();
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(new HttpResponseToSend(200, "Hey"), new EndpointUrlFilter("/admin")));
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(new HttpResponseToSend(200, "Hey"), new EndpointUrlFilter("/api")));
-        String response = getAndGetResponse("/admin");
+        String response = getAndGetResponse("/admin").body;
         Assert.assertNotNull(response, response);
         Assert.assertFalse(response, response.equals("Hey"));
-        response = getAndGetResponse("/api");
+        response = getAndGetResponse("/api").body;
         Assert.assertFalse(response, response.length() == 0);
         Assert.assertNotNull(response, response);
         Assert.assertFalse(response, response.length() == 0);

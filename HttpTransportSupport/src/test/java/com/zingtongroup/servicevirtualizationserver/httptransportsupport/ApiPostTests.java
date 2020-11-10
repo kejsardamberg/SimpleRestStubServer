@@ -18,15 +18,15 @@ public class ApiPostTests extends ServerTestBase{
         }
         longString.append(">");
         String postBody = "{\"httpResponse\":{\"headers\":[],\"body\":\"" + longString.toString() + "\",\"bodyType\":\"direct\",\"responseCode\":\"200\"},\"filters\":[{\"type\":\"EndpointUrlFilter\",\"field1\":\"Cadabra\"}]}\n";
-        String responseBody = postAndGetResponse(postBody);
+        HttpResponse responseBody = postAndGetResponse(postBody);
     }
 
     @Test
     public void postAnyThingUnParsableCreatesNextResponse() throws IOException {
         RegisteredPreparedHttpResponses.getInstance().registeredResponses.clear();
         postAndGetResponse("Hello nice one");
-        String response = getAndGetResponse("/sdfasdg");
-        Assert.assertTrue(response.equals("Hello nice one"));
+        HttpResponse response = getAndGetResponse("/sdfasdg");
+        Assert.assertTrue(response.body.equals("Hello nice one"));
     }
 
     @Test
@@ -36,10 +36,10 @@ public class ApiPostTests extends ServerTestBase{
         String postBody = "{\"httpResponse\":{\"headers\":[],\"body\":\"Abra\",\"bodyType\":\"direct\",\"responseCode\":\"200\"},\"filters\":[{\"type\":\"EndpointUrlFilter\",\"field1\":\"Cadabra\"}]}\n";
         postAndGetResponse(postBody);
 
-        String response = getAndGetResponse("/api");
+        HttpResponse response = getAndGetResponse("/api");
 
-        Assert.assertTrue(response, response.contains("Abra"));
-        Assert.assertTrue(response, response.contains("Cadabra"));
+        Assert.assertTrue(response.body, response.body.contains("Abra"));
+        Assert.assertTrue(response.body, response.body.contains("Cadabra"));
 
     }
 

@@ -16,7 +16,7 @@ public class BodyContainsMatchFilterTest extends ServerTestBase {
     public void bodyContainsMatchShouldRespond() throws IOException {
         RegisteredPreparedHttpResponses.getInstance().registeredResponses.clear();
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(new HttpResponseToSend(200, "Yes"), new BodyContainsMatchFilter("This")));
-        String response = postAndGetResponse("Anything and This of course", "/sdaaasdg");
+        String response = postAndGetResponse("Anything and This of course", "/sdaaasdg").body;
         Assert.assertTrue(response.equals("Yes"));
     }
 
@@ -24,7 +24,7 @@ public class BodyContainsMatchFilterTest extends ServerTestBase {
     public void bodyDoNotContainShouldNotReturnResponse() throws IOException {
         RegisteredPreparedHttpResponses.getInstance().registeredResponses.clear();
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(new HttpResponseToSend(200, "Yes"), new BodyContainsMatchFilter("This")));
-        String response = postAndGetResponse("Anything but that of course", "/sdaaasdg");
+        String response = postAndGetResponse("Anything but that of course", "/sdaaasdg").body;
         Assert.assertFalse(response.equals("Yes"));
     }
 }

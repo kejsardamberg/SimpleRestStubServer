@@ -34,7 +34,6 @@ public class HttpServer implements Runnable{
             in = new BufferedReader(new InputStreamReader(connect.getInputStream())); // we read characters from the client via input stream on the socket
             out = new PrintWriter(connect.getOutputStream()); // we get character output stream to client (for headers)
             dataOut = new BufferedOutputStream(connect.getOutputStream()); // get binary output stream to client (for requested data)
-
             request = identifyRequest();
             System.out.println("Received request:" + System.lineSeparator() + request.toString());
             sendAdminPageIfApplicable();
@@ -255,7 +254,14 @@ public class HttpServer implements Runnable{
     }
 
     private void sendResponse(PrintWriter out, OutputStream dataOut, PreparedHttpResponse response) throws IOException {
-        byte[] fileData = response.getResponse().body().getBytes();
+        byte[] fileData = null;
+        if(response != null && response.httpResponse != null && "file".equals(response.httpResponse.getBodyType())){
+            File file = new File(response.httpResponse.bodyFilePath);
+            InputStream is = new FileInputStream(file);
+            fileData = is.readAllBytes();
+        } else if (response.httpResponse.body != null) {
+            fileData = response.getResponse().body().getBytes();
+        }
 
         out.println("HTTP/1.1 " + response.getResponse().statusCode() + " OK");
         out.println("Server: ServiceVirtualization");

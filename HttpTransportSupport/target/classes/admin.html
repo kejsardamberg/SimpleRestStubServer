@@ -416,7 +416,7 @@
                 preparedStatement.httpResponse.body = document.getElementById('responsebodycontent').value;
                 preparedStatement.httpResponse.bodyType = 'direct';
             } else {
-                preparedStatement.httpResponse.body = document.getElementById('bodycontentfilepath').value;
+                preparedStatement.httpResponse.bodyFilePath = document.getElementById('bodycontentfilepath').value;
                 preparedStatement.httpResponse.bodyType = 'file';
             }
             preparedStatement.httpResponse.responseCode = document.getElementById('responsecode').value;
@@ -628,7 +628,7 @@
 
 <body onload='init()'>
 <h1>Service virtualization server admin GUI</h1>
-<span class="version">Version 1.0.0</span><br>
+<span class="version">Version 1.1.1</span><br>
 <div id="help" onclick="document.getElementById('help').style.display = 'none';">
     <h2>Concepts</h2>
     <p>

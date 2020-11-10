@@ -15,7 +15,7 @@ public class OriginUrlFilterTest extends ServerTestBase {
     public void originMatchShouldRespond() throws FileNotFoundException {
         RegisteredPreparedHttpResponses.getInstance().registeredResponses.clear();
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(new HttpResponseToSend(200, "Yes"), new OriginUrlFilter("127.0.0.1:" + PORT)));
-        String response = getAndGetResponse("/sdaaasdg");
+        String response = getAndGetResponse("/sdaaasdg").body;
         Assert.assertTrue(response.equals("Yes"));
     }
 
@@ -23,13 +23,7 @@ public class OriginUrlFilterTest extends ServerTestBase {
     public void originNonMatchShouldNotRespond()  {
         RegisteredPreparedHttpResponses.getInstance().registeredResponses.clear();
         RegisteredPreparedHttpResponses.getInstance().add(new PreparedHttpResponse(new HttpResponseToSend(200, "Yes"), new OriginUrlFilter("134.124.124.111:9090")));
-        Exception e = null;
-        try{
-            String response = getAndGetResponse("/sdaaasdg");
-        }catch (Exception w){
-            e = w;
-            System.out.println(w.getMessage());
-        }
-        Assert.assertNotNull(e);
+        HttpResponse response = getAndGetResponse("/sdaaasdg");
+        Assert.assertTrue(response.responseCode == 404);
     }
 }

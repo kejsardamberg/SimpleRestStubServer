@@ -28,13 +28,13 @@ public class ServerTestBase {
     public static void teardown(){
     }
 
-    String postAndGetResponse(String body) throws IOException {
+    HttpResponse postAndGetResponse(String body) throws IOException {
         return postAndGetResponse(body, "/api");
     }
 
-    String getAndGetResponse(String endpoint) throws FileNotFoundException{
+    HttpResponse getAndGetResponse(String endpoint){
         HttpURLConnection connection = null;
-
+        HttpResponse response = new HttpResponse();
         try {
             //Create connection
             URL url = new URL("http://127.0.0.1:" + PORT + endpoint);
@@ -59,12 +59,16 @@ public class ServerTestBase {
             }} catch (IOException e) {
                 e.printStackTrace();
             }
-            String responseBody = content.toString();
+            connection.getResponseCode();
+            String responseBody = null;
+            if(content != null){
+                responseBody = content.toString();
             if(responseBody.length() > 0)
                 responseBody = responseBody.substring(0, responseBody.length() - System.lineSeparator().length());
-            return responseBody;
-        } catch (FileNotFoundException e) {
-            throw e;
+            }
+            response.body = responseBody;
+            response.responseCode = connection.getResponseCode();
+            return response;
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -76,8 +80,10 @@ public class ServerTestBase {
     }
 
 
-    String postAndGetResponse(String body, String endpoint) throws IOException {
+    HttpResponse postAndGetResponse(String body, String endpoint) throws IOException {
         System.out.println(body);
+
+        HttpResponse response = new HttpResponse();
 
         var myurl = new URL("http://127.0.0.1:" + PORT + endpoint);
         HttpURLConnection con = (HttpURLConnection) myurl.openConnection();
@@ -107,12 +113,14 @@ public class ServerTestBase {
                 }
             }
 
+            response.responseCode = con.getResponseCode();
             System.out.println(content.toString());
             con.disconnect();
             String responseBody = content.toString();
             if(responseBody.length() > 0)
                 responseBody = responseBody.substring(0, responseBody.length() - System.lineSeparator().length());
-            return responseBody;
+            response.body = responseBody;
+            return response;
         } finally {
             con.disconnect();
         }

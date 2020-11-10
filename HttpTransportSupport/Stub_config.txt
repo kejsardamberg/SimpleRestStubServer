@@ -1,0 +1,45 @@
+[ {
+  "httpResponse" : {
+    "responseCode" : 200,
+    "httpRequest" : null,
+    "body" : "Hello gorgeous",
+    "bodyFilePath" : null,
+    "uri" : null,
+    "bodyType" : "direct",
+    "headers" : [ ]
+  },
+  "id" : "8acb6cee-15ea-43b7-83e5-2b2fba79ac35",
+  "filters" : [ {
+    "field1" : "GET",
+    "field2" : null,
+    "type" : "HttpMethodVerbFilter",
+    "description" : "Request method equals 'GET'."
+  }, {
+    "field1" : "/festivities",
+    "field2" : null,
+    "type" : "EndpointUrlFilter",
+    "description" : "End-point equals '/festivities'"
+  } ]
+}, {
+  "httpResponse" : {
+    "responseCode" : 200,
+    "httpRequest" : null,
+    "body" : "Hello ugly",
+    "bodyFilePath" : null,
+    "uri" : null,
+    "bodyType" : "direct",
+    "headers" : [ ]
+  },
+  "id" : "768767f1-232d-451c-ae8c-e2b763653d4b",
+  "filters" : [ {
+    "field1" : "POST",
+    "field2" : null,
+    "type" : "HttpMethodVerbFilter",
+    "description" : "Request method equals 'POST'."
+  }, {
+    "field1" : "/festivities",
+    "field2" : null,
+    "type" : "EndpointUrlFilter",
+    "description" : "End-point equals '/festivities'"
+  } ]
+} ]

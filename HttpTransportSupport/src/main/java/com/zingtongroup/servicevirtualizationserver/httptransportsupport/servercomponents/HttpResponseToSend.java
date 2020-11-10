@@ -11,7 +11,7 @@ import java.net.http.HttpResponse;
 import java.util.Optional;
 
 public class HttpResponseToSend  {
-    public int responseCode = 200;
+    public int responseCode;
     public String body;
     public String bodyFilePath;
     public HttpRequest httpRequest;

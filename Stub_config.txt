@@ -1,0 +1,38 @@
+[ {
+  "httpResponse" : {
+    "responseCode" : 200,
+    "httpRequest" : null,
+    "body" : "Hello world",
+    "bodyFilePath" : null,
+    "uri" : null,
+    "bodyType" : "direct",
+    "headers" : [ {
+      "name" : "Content-Type",
+      "value" : "text/plain"
+    } ]
+  },
+  "id" : "2da66ed6-330d-4050-91b5-5cc4ed89d452",
+  "filters" : [ {
+    "field1" : "/test",
+    "field2" : null,
+    "type" : "EndpointUrlFilter",
+    "description" : "End-point equals '/test'"
+  } ]
+}, {
+  "httpResponse" : {
+    "responseCode" : 200,
+    "httpRequest" : null,
+    "body" : "helloworldcontent.txt",
+    "bodyFilePath" : null,
+    "uri" : null,
+    "bodyType" : "file",
+    "headers" : [ ]
+  },
+  "id" : null,
+  "filters" : [ {
+    "field1" : "",
+    "field2" : null,
+    "type" : "NextResponse",
+    "description" : "com.zingtongroup.servicevirtualizationserver.httptransportsupport.requestfilters.NextResponse@1287961"
+  } ]
+} ]
