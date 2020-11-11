@@ -46,7 +46,7 @@ Now point your web browser to the given admin URL to configure the utility behav
 
 First you'll see a list of registered responses. 
 
-![Screenshot](http://damberg.one/alster/work/reststubserver/list.JPG?v=2)
+![Screenshot](http://damberg.one/alster/work/reststubserver/list.JPG?v=3)
 
 To add more responses, just click the Add... button.
 
@@ -71,6 +71,20 @@ As filters for when to apply which response you can combine a range of filters:
 ![Screenshot](http://damberg.one/alster/work/reststubserver/filters.JPG)
 
  When you change filter type, a short description get visible to explain the effects of this filter.
+ 
+### Test client
+
+The tool admin GUI include a HTTP client to test your filters. By clicking the Test... button a test client appears.
+
+![TestClient](http://damberg.one/alster/work/reststubserver/testclient.JPG)
+Test client
+
+When you enter headers, endpoint, and method and press send the request, as perceived from the server, as well as the response, as perceived by the test client, is displayed.
+
+![Test response](http://damberg.one/alster/work/reststubserver/clientresponse.JPG)
+Client response screenshot
+
+This utility is mostly designed to ease of testing your filters. 
  
 ## API
 The API is accessed by endpoint '/api' to this server. There are a few tricky ways of using this:
