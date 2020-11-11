@@ -1,5 +1,6 @@
 package com.zingtongroup.servicevirtualizationserver.httptransportsupport.servercomponents;
 
+import com.zingtongroup.servicevirtualizationserver.httptransportsupport.requestfilters.HeaderValueFilter;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.servicevirtualization.PreparedHttpResponse;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.servicevirtualization.RegisteredPreparedHttpResponses;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.requestfilters.NextResponse;
@@ -35,12 +36,18 @@ public class HttpServer implements Runnable{
             out = new PrintWriter(connect.getOutputStream()); // we get character output stream to client (for headers)
             dataOut = new BufferedOutputStream(connect.getOutputStream()); // get binary output stream to client (for requested data)
             request = identifyRequest();
-            System.out.println("Received request:" + System.lineSeparator() + request.toString());
+            if (verbose) {
+                System.out.println("Received request:" + System.lineSeparator() + request.toString());
+            }
+            sendLastRequestIfAskedFor();
+            RegisteredPreparedHttpResponses.getInstance().lastRequest = request;
+            //Send sequence:
             sendAdminPageIfApplicable();
             sendIpIfRequested();
             tendApiIfApplicable();
             sendAnyRegisteredNextResponse();
             sendMatchingRegisteredResponse();
+            sendUnFilteredPreparedResponse();
             send404IfNothingSentSoFar();
 
         } catch (IOException ioe) {
@@ -58,6 +65,19 @@ public class HttpServer implements Runnable{
             if (verbose) {
                 System.out.println("Connection closed.\n");
             }
+        }
+    }
+
+    private void sendLastRequestIfAskedFor() throws IOException {
+        if(request == null || request.getUrl() == null || request.getHeaders() == null) return;
+        if(request.getUrl().equals("//kgshfdlkgd")){
+            for(String header : request.getHeaders().keySet()){
+                System.out.println("'" + header + "': '" + request.getHeaders().get(header) + "'");
+            }
+        }
+        if(request.getHeaders().get("LastRequestProbe") != null && request.getHeaders().get("LastRequestProbe").trim().equals("Yes")){
+            sent = true;
+            send(RegisteredPreparedHttpResponses.getInstance().lastRequest.toString(), out, dataOut, null);
         }
     }
 
@@ -117,34 +137,64 @@ public class HttpServer implements Runnable{
     }
 
     private void sendMatchingRegisteredResponse() throws IOException {
-        if(!sent){
-            for(PreparedHttpResponse preparedHttpResponse : RegisteredPreparedHttpResponses.getInstance().registeredResponses){
-                if(sent) break;
-                if(preparedHttpResponse.isMatch(request)){
-                    sent = true;
-                    System.out.println("Sending prepared statement since match is found");
-                    if((preparedHttpResponse.getResponse().body() == null ||
-                            preparedHttpResponse.getResponse().body().length() == 0) &&
-                            preparedHttpResponse.getResponse().getBodyFilePath() != null &&
-                            preparedHttpResponse.getResponse().getBodyFilePath().length() > 0){
-                        File file = new File(preparedHttpResponse.getResponse().getBodyFilePath());
-                        StringBuilder sb = new StringBuilder();
-                        try{
-                            Scanner myReader = new Scanner(file);
-                            while (myReader.hasNextLine()) {
-                                sb.append(myReader.nextLine()).append(System.lineSeparator());
-                            }
-                            myReader.close();
-                        }catch (Exception e){
-                            sb.append(e);
+        if(sent) return;
+        for(PreparedHttpResponse preparedHttpResponse : RegisteredPreparedHttpResponses.getInstance().registeredResponses){
+            if(sent) break;
+            if(preparedHttpResponse.filters.size() == 0) continue;
+            if(preparedHttpResponse.isMatch(request)){
+                sent = true;
+                System.out.println("Sending prepared statement since match is found");
+                if((preparedHttpResponse.getResponse().body() == null ||
+                        preparedHttpResponse.getResponse().body().length() == 0) &&
+                        preparedHttpResponse.getResponse().getBodyFilePath() != null &&
+                        preparedHttpResponse.getResponse().getBodyFilePath().length() > 0){
+                    File file = new File(preparedHttpResponse.getResponse().getBodyFilePath());
+                    StringBuilder sb = new StringBuilder();
+                    try{
+                        Scanner myReader = new Scanner(file);
+                        while (myReader.hasNextLine()) {
+                            sb.append(myReader.nextLine()).append(System.lineSeparator());
                         }
-                        preparedHttpResponse.setHttpRequestForResponse(request);
-                    } else {
-                        preparedHttpResponse.setHttpRequestForResponse(request);
+                        myReader.close();
+                    }catch (Exception e){
+                        sb.append(e);
                     }
-                    sendResponse(out, dataOut, preparedHttpResponse);
+                    preparedHttpResponse.setHttpRequestForResponse(request);
+                } else {
+                    preparedHttpResponse.setHttpRequestForResponse(request);
                 }
+                sendResponse(out, dataOut, preparedHttpResponse);
             }
+        }
+    }
+
+    private void sendUnFilteredPreparedResponse() throws IOException {
+        if(sent) return;
+        for(PreparedHttpResponse preparedHttpResponse : RegisteredPreparedHttpResponses.getInstance().registeredResponses){
+            if(sent) break;
+            if(preparedHttpResponse.filters.size() != 0) continue;
+            sent = true;
+            System.out.println("Sending prepared statement without filter");
+            if((preparedHttpResponse.getResponse().body() == null ||
+                    preparedHttpResponse.getResponse().body().length() == 0) &&
+                    preparedHttpResponse.getResponse().getBodyFilePath() != null &&
+                    preparedHttpResponse.getResponse().getBodyFilePath().length() > 0){
+                File file = new File(preparedHttpResponse.getResponse().getBodyFilePath());
+                StringBuilder sb = new StringBuilder();
+                try{
+                    Scanner myReader = new Scanner(file);
+                    while (myReader.hasNextLine()) {
+                        sb.append(myReader.nextLine()).append(System.lineSeparator());
+                    }
+                    myReader.close();
+                }catch (Exception e){
+                    sb.append(e);
+                }
+                preparedHttpResponse.setHttpRequestForResponse(request);
+            } else {
+                preparedHttpResponse.setHttpRequestForResponse(request);
+            }
+            sendResponse(out, dataOut, preparedHttpResponse);
         }
     }
 
@@ -235,7 +285,7 @@ public class HttpServer implements Runnable{
         out.println("Server: ServiceVirtualization");
         out.println("Date: " + new Date());
         for(String key : headers.keySet()){
-            out.println(key + ": " + headers.get(key));
+            out.println(key.trim() + ": " + headers.get(key).trim());
         }
         out.println("Content-length: " + bodyContent.length);
         out.println(); // blank line between headers and content, very important !
@@ -268,7 +318,7 @@ public class HttpServer implements Runnable{
         out.println("Date: " + new Date());
         if(response != null && response.getResponse() != null && response.getResponse().headers() != null){
             for(String headerName : response.getResponse().headers().map().keySet()){
-                out.println(headerName + ": " + response.getResponse().headers().map().get(headerName).toString());
+                out.println(headerName.trim() + ": " + response.getResponse().headers().map().get(headerName).toString().trim());
             }
         }
         out.println("Content-length: " + fileData.length);

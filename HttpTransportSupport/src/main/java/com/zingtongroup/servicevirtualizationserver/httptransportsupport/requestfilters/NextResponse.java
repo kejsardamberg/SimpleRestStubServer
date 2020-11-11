@@ -19,4 +19,9 @@ public class NextResponse extends HttpRequestFilter {
     public String friendlyName() {
         return "Next response to send";
     }
+
+    @Override
+    public String toString(){
+        return "Send on next request";
+    }
 }

@@ -11,12 +11,12 @@
       "value" : "text/plain"
     } ]
   },
-  "id" : "51eaf9f3-5acb-4bc9-90de-28a51267928d",
+  "id" : "33bb2d2f-663a-4ac6-8222-05e15ebe7c12",
   "filters" : [ {
     "field1" : "/test",
     "field2" : null,
-    "description" : "End-point equals '/test'",
-    "type" : "EndpointUrlFilter"
+    "type" : "EndpointUrlFilter",
+    "description" : "End-point equals '/test'"
   } ]
 }, {
   "httpResponse" : {
@@ -26,87 +26,50 @@
     "bodyFilePath" : null,
     "uri" : null,
     "bodyType" : "direct",
+    "headers" : [ ]
+  },
+  "id" : "51016782-dced-4afa-93a3-b8c519d9f635",
+  "filters" : [ {
+    "field1" : "/persons/321",
+    "field2" : "",
+    "type" : "EndpointUrlFilter",
+    "description" : "End-point equals '/persons/321'"
+  } ]
+}, {
+  "httpResponse" : {
+    "responseCode" : 200,
+    "httpRequest" : null,
+    "body" : "<xml><person><name>Mrs Smith</name></person></xml>",
+    "bodyFilePath" : null,
+    "uri" : null,
+    "bodyType" : "direct",
     "headers" : [ {
-      "name" : "apikey",
-      "value" : "asdfasdfu"
+      "name" : "Content-Type",
+      "value" : "application/xml"
     } ]
   },
-  "id" : "86081703-0afb-474f-9203-41e6215176d3",
-  "filters" : [ {
-    "field1" : "GET",
-    "field2" : "",
-    "description" : "Request method equals 'GET'.",
-    "type" : "HttpMethodVerbFilter"
-  }, {
-    "field1" : "apikey",
-    "field2" : "asdfasdfu",
-    "description" : "Request header value 'apikey'='asdfasdfu'",
-    "type" : "HeaderValueFilter"
-  } ]
-}, {
-  "httpResponse" : {
-    "responseCode" : 200,
-    "httpRequest" : null,
-    "body" : "",
-    "bodyFilePath" : null,
-    "uri" : null,
-    "bodyType" : "direct",
-    "headers" : [ ]
-  },
-  "id" : "8463b04e-2dd2-406b-b9b5-ad7136b45fb6",
-  "filters" : [ {
-    "field1" : "POST",
-    "field2" : "asdfasdfu",
-    "description" : "Request method equals 'POST'.",
-    "type" : "HttpMethodVerbFilter"
-  }, {
-    "field1" : "/persons",
-    "field2" : "asdfasdfu",
-    "description" : "End-point equals '/persons'",
-    "type" : "EndpointUrlFilter"
-  } ]
-}, {
-  "httpResponse" : {
-    "responseCode" : 200,
-    "httpRequest" : null,
-    "body" : "<xml><person><name>Mr Smith</name><id>123</id></person>",
-    "bodyFilePath" : null,
-    "uri" : null,
-    "bodyType" : "direct",
-    "headers" : [ ]
-  },
-  "id" : "f28a8058-be6d-4ee4-8f91-3e6dd1084194",
+  "id" : "10f99cf8-9f85-48b5-82d9-ac273151a89b",
   "filters" : [ {
     "field1" : "/persons/123",
-    "field2" : "asdfasdfu",
-    "description" : "End-point equals '/persons/123'",
-    "type" : "EndpointUrlFilter"
-  }, {
-    "field1" : "GET",
-    "field2" : "asdfasdfu",
-    "description" : "Request method equals 'GET'.",
-    "type" : "HttpMethodVerbFilter"
+    "field2" : "",
+    "type" : "EndpointUrlFilter",
+    "description" : "End-point equals '/persons/123'"
   } ]
 }, {
   "httpResponse" : {
     "responseCode" : 200,
     "httpRequest" : null,
-    "body" : null,
-    "bodyFilePath" : "issues.txt",
+    "body" : "Hollow world",
+    "bodyFilePath" : null,
     "uri" : null,
-    "bodyType" : "file",
+    "bodyType" : "direct",
     "headers" : [ ]
   },
-  "id" : "6a1b0da0-5c1f-4adb-a8a4-9e761fd999ed",
+  "id" : "8cb9a043-97bd-4804-b590-2aeee95d2f51",
   "filters" : [ {
-    "field1" : "GET",
+    "field1" : "127.0.0.1:8089",
     "field2" : "",
-    "description" : "Request method equals 'GET'.",
-    "type" : "HttpMethodVerbFilter"
-  }, {
-    "field1" : "/issues",
-    "field2" : "",
-    "description" : "End-point equals '/issues'",
-    "type" : "EndpointUrlFilter"
+    "type" : "OriginUrlFilter",
+    "description" : "Request origin URL = '127.0.0.1:8089'"
   } ]
 } ]

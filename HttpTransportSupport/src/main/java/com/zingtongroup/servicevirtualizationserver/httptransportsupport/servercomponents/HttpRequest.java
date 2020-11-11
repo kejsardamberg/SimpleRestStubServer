@@ -12,10 +12,14 @@ import java.util.Map;
 
 public class HttpRequest implements Inbound {
     private final Map<String, String> headers;
-    private final String verb;
-    private final String url;
-    private final String body;
-    private final String input;
+    private String verb;
+    private String url;
+    private String body;
+    private String input;
+
+    HttpRequest(){
+        this.headers = new HashMap<>();
+    }//for JSON
 
     public HttpRequest(String input, String verb, String url, String body){
         this.headers = new HashMap<>();

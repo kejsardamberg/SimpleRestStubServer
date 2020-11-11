@@ -19,6 +19,7 @@ import com.zingtongroup.servicevirtualizationserver.interfaces.ServiceVirtualiza
         @JsonSubTypes.Type(value = HttpMethodVerbFilter.class),
         @JsonSubTypes.Type(value = NextResponse.class),
         @JsonSubTypes.Type(value = OriginUrlFilter.class),
+        @JsonSubTypes.Type(value = TimePeriodFilter.class),
         @JsonSubTypes.Type(value = BodyContainsMatchFilter.class)
 })
 @JsonIgnoreProperties(ignoreUnknown = true) // to ignore ALL unknown properties

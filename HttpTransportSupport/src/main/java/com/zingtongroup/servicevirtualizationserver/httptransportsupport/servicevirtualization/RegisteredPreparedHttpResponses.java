@@ -11,6 +11,7 @@ import com.zingtongroup.servicevirtualizationserver.httptransportsupport.convert
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.requestfilters.*;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.servercomponents.HttpHeader;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.servercomponents.HttpHeaders;
+import com.zingtongroup.servicevirtualizationserver.httptransportsupport.servercomponents.HttpRequest;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.servercomponents.HttpResponseToSend;
 
 import java.io.*;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 public class RegisteredPreparedHttpResponses {
 
     public ArrayList<PreparedHttpResponse> registeredResponses;
+    public HttpRequest lastRequest;
 
     private RegisteredPreparedHttpResponses()
     {
@@ -46,6 +48,10 @@ public class RegisteredPreparedHttpResponses {
     }
 
     public void add(PreparedHttpResponse preparedHttpResponse, boolean saveToFile){
+        if(preparedHttpResponse.filters.size() == 0 && registeredResponses.stream().anyMatch(x -> x.filters.size() == 0)){
+            System.out.println("WARNING: The added filter will never be sent unless other filter-less prepared responses are deleted.");
+        }
+
         registeredResponses.add(preparedHttpResponse);
         if(saveToFile) saveToFile();
     }
