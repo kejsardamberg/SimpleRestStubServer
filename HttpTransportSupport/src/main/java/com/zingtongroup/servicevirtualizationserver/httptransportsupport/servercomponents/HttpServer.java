@@ -50,7 +50,7 @@ public class HttpServer implements Runnable{
             sendUnFilteredPreparedResponse();
             send404IfNothingSentSoFar();
 
-        } catch (IOException ioe) {
+        } catch (IOException | InterruptedException ioe) {
             System.out.println("Server error : " + ioe);
         } finally {
             try {
@@ -136,7 +136,7 @@ public class HttpServer implements Runnable{
         }
     }
 
-    private void sendMatchingRegisteredResponse() throws IOException {
+    private void sendMatchingRegisteredResponse() throws IOException, InterruptedException {
         if(sent) return;
         for(PreparedHttpResponse preparedHttpResponse : RegisteredPreparedHttpResponses.getInstance().registeredResponses){
             if(sent) break;
@@ -168,7 +168,7 @@ public class HttpServer implements Runnable{
         }
     }
 
-    private void sendUnFilteredPreparedResponse() throws IOException {
+    private void sendUnFilteredPreparedResponse() throws IOException, InterruptedException {
         if(sent) return;
         for(PreparedHttpResponse preparedHttpResponse : RegisteredPreparedHttpResponses.getInstance().registeredResponses){
             if(sent) break;
@@ -198,10 +198,11 @@ public class HttpServer implements Runnable{
         }
     }
 
-    private void sendAnyRegisteredNextResponse() throws IOException {
+    private void sendAnyRegisteredNextResponse() throws IOException, InterruptedException {
         if(!sent){
             PreparedHttpResponse responseForRemoval = null;
             for(PreparedHttpResponse preparedHttpResponse : RegisteredPreparedHttpResponses.getInstance().registeredResponses){
+                if(sent) break;
                 if(preparedHttpResponse.getFilters().stream().anyMatch(x -> x.getClass().isAssignableFrom(NextResponse.class))){
                     System.out.println("Sending prepared statement since match for next response is found");
                     preparedHttpResponse.setHttpRequestForResponse(request);
@@ -303,8 +304,11 @@ public class HttpServer implements Runnable{
         send(html, out, dataOut, headers);
     }
 
-    private void sendResponse(PrintWriter out, OutputStream dataOut, PreparedHttpResponse response) throws IOException {
+    private void sendResponse(PrintWriter out, OutputStream dataOut, PreparedHttpResponse response) throws IOException, InterruptedException {
         byte[] fileData = null;
+        if(response.delay != 0){
+            Thread.sleep(response.delay);
+        }
         if(response != null && response.httpResponse != null && "file".equals(response.httpResponse.getBodyType())){
             File file = new File(response.httpResponse.bodyFilePath);
             InputStream is = new FileInputStream(file);

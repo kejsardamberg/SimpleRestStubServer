@@ -356,6 +356,9 @@
                         var statusCode = document.createElement('td');
                         statusCode.innerHTML = registeredResponses[i].httpResponse.responseCode;
                         tr.appendChild(statusCode);
+                        var delay = document.createElement('td');
+                        delay.innerHTML = registeredResponses[i].delay;
+                        tr.appendChild(delay);
                         var buttonCell = document.createElement('td');
                         var button = document.createElement('button');
                         button.innerHTML = "Delete";
@@ -436,6 +439,7 @@
                 preparedStatement.httpResponse.bodyType = 'file';
             }
             preparedStatement.httpResponse.responseCode = document.getElementById('responsecode').value;
+            preparedStatement.delay = document.getElementById('delay').value;
             send();
             document.getElementById('new').style.display = 'none';
             document.getElementById('addPreparedResponse').style.display = 'block';
@@ -502,6 +506,7 @@
             document.getElementById('addPreparedResponse').style.display = 'block';
             preparedStatement = {};
             preparedStatement.id = uuidv4();
+            preparedStatement.delay = 0;
             preparedStatement.httpResponse = {};
             preparedStatement.httpResponse.headers = [];
             preparedStatement.filters = [];
@@ -685,7 +690,7 @@
 
 <body onload='init()'>
 <h1>Service virtualization server admin GUI</h1>
-<span class="version">Version 1.2.0</span><br>
+<span class="version">Version 1.3.0</span><br>
 <div id="help" onclick="document.getElementById('help').style.display = 'none';">
     <h2>Concepts</h2>
     <p>
@@ -829,6 +834,7 @@
             <th>Header(s)</th>
             <th>Body</th>
             <th>Status code</th>
+            <th>Delay (ms)</th>
             <th></th>
         </tr>
     </table>
@@ -840,9 +846,11 @@
     <div>
         <h3>Response to send</h3>
         <div id='responsecodesection'>
-            <h4>HTTP response code</h4>
+            <h4>Advanced</h4>
             <label for='responsecode'>Response code for registered response:</label>
             <input id="responsecode" type="number" value=200>
+            <label for='delay'>Server side response delay (ms):</label>
+            <input id="delay" type="number" value=0>
         </div>
         <div id='responsebody'>
             <h4>Response body content</h4>
@@ -935,6 +943,14 @@
             xhttp.send();
         }
 
+        function clearreceivedresponse(){
+            document.getElementById('clientresponseheaders').innerHTML = '';
+            document.getElementById('clientperceivedrequest').innerHTML = '';
+            document.getElementById('clientstatuscodevalue').innerHTML = '';
+            document.getElementById('clientresponsebodyvalue').innerHTML = '';
+            document.getElementById('responsetime').innerHTML = '';
+        }
+
         function sendclientrequest(){
             var method = document.getElementById('clientmethod').value;
             var body = document.getElementById('clientbody').value;
@@ -960,7 +976,9 @@
                 xhttp.setRequestHeader(clientheaders[i].name, clientheaders[i].value);
             }
             xhttp.open(method, endpoint, false);
+            var startTime = new Date().getTime();
             xhttp.send(body);
+            document.getElementById('responsetime').innerHTML = (+(new Date().getTime()) - +startTime) + " ms";
             showLastRequest();
         }
     </script>
@@ -991,6 +1009,8 @@
         <p id="clientstatuscode">
             <span id="clientstatuscodelabel">Response status code: </span>
             <span class="responsevalue" id="clientstatuscodevalue"></span>
+            <br>
+            <span>Response time: </span><span id="responsetime"></span>
         </p>
         <p>
             <span>Headers:</span>
@@ -1000,7 +1020,7 @@
             <span>Body:<br></span>
             <pre class="responsevalue" id="clientresponsebodyvalue"></pre>
         </p>
-        <button onclick="document.getElementById('clientresponseheaders').innerHTML = '';document.getElementById('clientperceivedrequest').innerHTML = '';document.getElementById('clientstatuscodevalue').innerHTML = '';document.getElementById('clientresponsebodyvalue').innerHTML = '';">Clear</button>
+        <button onclick="clearreceivedresponse()">Clear</button>
     </div>
     <button id="closeclientbutton" onclick="document.getElementById('httpClient').style.display = 'none';">Close</button>
 </div>

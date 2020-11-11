@@ -17,14 +17,16 @@ public class PreparedHttpResponse implements PreparedResponse<HttpResponseToSend
     public List<HttpRequestFilter> filters;
     public HttpResponseToSend httpResponse;
     public UUID id;
+    public int delay;
 
     PreparedHttpResponse(){
+        id = UUID.randomUUID();
         this.filters = new ArrayList<>();
+        delay = 0;
     }
 
     public PreparedHttpResponse(HttpResponseToSend httpResponse, HttpRequestFilter ... filters){
-        this.filters = new ArrayList<>();
-        id = UUID.randomUUID();
+        this();
         this.httpResponse = httpResponse;
         if(filters == null) return;
         for(HttpRequestFilter filter : filters){
