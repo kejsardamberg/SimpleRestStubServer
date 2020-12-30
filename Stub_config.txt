@@ -1,39 +1,5 @@
 [ {
   "httpResponse" : {
-    "responseCode" : 200,
-    "httpRequest" : {
-      "headers" : {
-        "Accept" : "*/*",
-        "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0",
-        "Connection" : "keep-alive",
-        "Referer" : "http://192.168.1.3:8089/admin",
-        "Host" : "192.168.1.3:8089",
-        "Accept-Language" : "sv-SE,sv;q=0.8,en-US;q=0.5,en;q=0.3",
-        "Accept-Encoding" : "gzip, deflate"
-      },
-      "verb" : "GET",
-      "url" : "/test",
-      "body" : ""
-    },
-    "body" : "Hello world",
-    "bodyFilePath" : null,
-    "uri" : null,
-    "bodyType" : "direct",
-    "headers" : [ {
-      "name" : "Content-Type",
-      "value" : "text/plain"
-    } ]
-  },
-  "id" : "33bb2d2f-663a-4ac6-8222-05e15ebe7c12",
-  "delay" : 0,
-  "filters" : [ {
-    "field1" : "/test",
-    "field2" : null,
-    "type" : "EndpointUrlFilter",
-    "description" : "End-point equals '/test'"
-  } ]
-}, {
-  "httpResponse" : {
     "responseCode" : 404,
     "httpRequest" : null,
     "body" : "",
@@ -74,7 +40,20 @@
 }, {
   "httpResponse" : {
     "responseCode" : 200,
-    "httpRequest" : null,
+    "httpRequest" : {
+      "headers" : {
+        "Accept" : "image/webp,*/*",
+        "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0",
+        "Connection" : "keep-alive",
+        "Referer" : "http://127.0.0.1:8089/admin",
+        "Host" : "127.0.0.1:8089",
+        "Accept-Language" : "sv-SE,sv;q=0.8,en-US;q=0.5,en;q=0.3",
+        "Accept-Encoding" : "gzip, deflate"
+      },
+      "verb" : "GET",
+      "url" : "/favicon.ico",
+      "body" : ""
+    },
     "body" : "Hollow world",
     "bodyFilePath" : null,
     "uri" : null,
@@ -123,7 +102,20 @@
 }, {
   "httpResponse" : {
     "responseCode" : 200,
-    "httpRequest" : null,
+    "httpRequest" : {
+      "headers" : {
+        "Accept" : "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Upgrade-Insecure-Requests" : "1",
+        "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0",
+        "Connection" : "keep-alive",
+        "Host" : "192.168.1.3:8089",
+        "Accept-Language" : "sv-SE,sv;q=0.8,en-US;q=0.5,en;q=0.3",
+        "Accept-Encoding" : "gzip, deflate"
+      },
+      "verb" : "GET",
+      "url" : "/gr",
+      "body" : ""
+    },
     "body" : "Ok",
     "bodyFilePath" : null,
     "uri" : null,
@@ -138,4 +130,35 @@
     "type" : "EndpointUrlFilter",
     "description" : "End-point equals '/gr'"
   } ]
+}, {
+  "httpResponse" : {
+    "responseCode" : 200,
+    "httpRequest" : null,
+    "body" : null,
+    "bodyFilePath" : "helloworldcontent.txt",
+    "uri" : null,
+    "bodyType" : "file",
+    "headers" : [ ]
+  },
+  "id" : "a180f03b-3765-4d09-a3be-ffce7089e75c",
+  "delay" : 0,
+  "filters" : [ {
+    "field1" : "/hello",
+    "field2" : null,
+    "type" : "EndpointUrlFilter",
+    "description" : "End-point equals '/hello'"
+  } ]
+}, {
+  "httpResponse" : {
+    "responseCode" : 200,
+    "httpRequest" : null,
+    "body" : "as",
+    "bodyFilePath" : null,
+    "uri" : null,
+    "bodyType" : "direct",
+    "headers" : [ ]
+  },
+  "id" : "321727f4-d2b1-4994-8cb1-43f0f9fd925f",
+  "delay" : 0,
+  "filters" : [ ]
 } ]

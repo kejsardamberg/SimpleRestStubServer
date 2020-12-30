@@ -55,6 +55,39 @@
 
         #new {
             display: none;
+            z-index: 1;
+            border: 10px solid DarkKhaki;
+            position: absolute;
+            top: 10px;
+            color: darkslategray;
+            left: 10px;
+            background-color: LemonChiffon;
+            margin-bottom: 50px;
+        }
+
+        #new div {
+            border: 1px solid DarkKhaki;
+            padding: 25px;
+            background-color: LightYellow;
+            margin: 25px;
+            color: darkslategray;
+            border-radius: 10px;
+        }
+
+        #new #recordClient {
+            display: none;
+            position: absolute;
+            color: black;
+            left: 10px;
+            top: 10px;
+            z-index: 2;
+            background-color: crimson;
+            border: 4px solid black;
+        }
+
+        #new #recordClient div {
+            background-color: crimson;
+            color: black;
         }
 
         th {
@@ -137,15 +170,17 @@
 
         #help {
             display: none;
-            background-color: skyblue;
+            background-color: palegreen;
             z-index: 1;
             position: absolute;
-            left: 10px;
-            top: 10px;
+            left: 25px;
+            top: 25px;
+            margin-right: 25px;
+            margin-bottom: 25px;
             overflow: auto;
-            padding: 15px;
-            color: darkslategray;
-            border: 10px solid white;
+            padding: 25px;
+            color: black;
+            border: 10px solid limegreen;
         }
 
         #httpClient {
@@ -518,6 +553,7 @@
         function addPreparedResponse() {
             document.getElementById('new').style.display = 'block';
             document.getElementById('addPreparedResponse').style.display = 'none';
+            document.getElementById('httpClient').style.display = 'none';
         }
 
         function deleteEntry(button){
@@ -690,7 +726,7 @@
 
 <body onload='init()'>
 <h1>Service virtualization server admin GUI</h1>
-<span class="version">Version 1.3.0</span><br>
+<span class="version">Version 1.4.0</span><br>
 <div id="help" onclick="document.getElementById('help').style.display = 'none';">
     <h2>Concepts</h2>
     <p>
@@ -845,6 +881,107 @@
     <h2>Register new prepared response</h2>
     <div>
         <h3>Response to send</h3>
+        <button id="recordButton" onclick="document.getElementById('recordClient').style.display = 'block';">Record...</button>
+
+
+
+
+
+
+
+        <div id="recordClient">
+            <script>
+        var clientheaders = [];
+        function clientaddheader(){
+            var name = document.getElementById('clientresponseheadername').value;
+            var value = document.getElementById('clientresponseheadervalue').value;
+            if(name === null || name.length > 0)return;
+            var header = {};
+            header.name = name;
+            header.value = value;
+            clientheaders.push(header);
+            document.getElementById('clientheaders').innerHTML += name + ": " + value + "<br>";
+        }
+
+        function saveAsPreparedResponse(){
+            alert('Not yet fully implemented. Sorry.');
+        }
+
+        function sendrecordrequest(){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    document.getElementById('saverecordedbutton').disabled = false;
+                    document.getElementById('clearrecordedresponsebutton').disabled = false;
+                    document.getElementById('recordresponsebodyvalue').innerHTML = textToHtml(this.responseText);
+                    document.getElementById('recordstatuscodevalue').innerHTML = this.status;
+                }
+            };
+            xhttp.open(document.getElementById('recordmethod').value, "/sgsdfjfdsfgf", false);
+            xhttp.setRequestHeader('ServiceVirtualizationForward', document.getElementById('recordendpoint').value);
+            xhttp.send(document.getElementById('recordbody').value);
+        }
+
+        function clearreceivedrecordresponse(){
+            document.getElementById('recordresponseheaders').innerHTML = '';
+            document.getElementById('recordstatuscodevalue').innerHTML = '';
+            document.getElementById('recordresponsebodyvalue').innerHTML = '';
+            document.getElementById('saverecordedbutton').disabled = true;
+            document.getElementById('clearrecordedresponsebutton').disabled = true;
+        }
+
+    </script>
+            <h2>HTTP record client</h2>
+            <div>
+                <h3>Request</h3>
+                <label for="recordendpoint">URL: </label>
+                <input id="recordendpoint" type="text" value="http://">
+                <label for="recordmethod">Method:</label>
+                <input id="recordmethod" type="text" value="GET">
+                <label for="recordbody">Body</label>
+                <textarea id="recordbody"></textarea>
+                Headers:<br>
+                <span id="recordheaders"></span>
+                <label for='recordresponseheadername'>Header name</label>
+                <input type='text' id='recordresponseheadername'><br>
+                <label for='recordresponseheadervalue'>Header value</label>
+                <input type='text' id='recordresponseheadervalue'><br>
+                <button id='recordaddheaderbutton' onclick='recordaddheader()'>Add header</button>
+                <button id="recordsendbutton" onclick="sendrecordrequest()">Send</button>
+            </div>
+            <div>
+                <h3>Response</h3>
+                <p id="recordstatuscode">
+                    <span id="recordstatuscodelabel">Response status code: </span>
+                    <span class="responsevalue" id="recordstatuscodevalue"></span>
+                </p>
+                <p>
+                    <span>Headers:</span>
+                    <span id="recordresponseheaders"></span>
+                </p>
+                <p id="recordresponsebody">
+                    <span>Body:<br></span>
+                <pre class="responsevalue" id="recordresponsebodyvalue"></pre>
+                </p>
+                <button id="clearrecordedresponsebutton" onclick="clearreceivedrecordresponse()" disabled>Clear</button>
+                <button id="saverecordedbutton" onclick="saveAsPreparedResponse()" disabled>Save as prepared response</button>
+            </div>
+            <button id="closerecorderbutton" onclick="document.getElementById('recordClient').style.display = 'none';">Close</button>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div id='responsecodesection'>
             <h4>Advanced</h4>
             <label for='responsecode'>Response code for registered response:</label>

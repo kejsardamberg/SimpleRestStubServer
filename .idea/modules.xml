@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Core/Core.iml" filepath="$PROJECT_DIR$/Core/Core.iml" />
       <module fileurl="file://$PROJECT_DIR$/HttpTransportSupport/HttpTransportSupport.iml" filepath="$PROJECT_DIR$/HttpTransportSupport/HttpTransportSupport.iml" />
       <module fileurl="file://$PROJECT_DIR$/Interfaces/Interfaces.iml" filepath="$PROJECT_DIR$/Interfaces/Interfaces.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MqTransportSupport/MqTransportSupport.iml" filepath="$PROJECT_DIR$/MqTransportSupport/MqTransportSupport.iml" />
       <module fileurl="file://$PROJECT_DIR$/PluginManager/PluginManager.iml" filepath="$PROJECT_DIR$/PluginManager/PluginManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/ServiceVirtualizationServer.iml" filepath="$PROJECT_DIR$/ServiceVirtualizationServer.iml" />
     </modules>

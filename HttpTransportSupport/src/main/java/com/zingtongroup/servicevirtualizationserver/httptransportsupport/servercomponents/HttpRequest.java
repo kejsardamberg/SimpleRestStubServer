@@ -13,11 +13,11 @@ import java.util.Map;
 public class HttpRequest implements Inbound {
     private final Map<String, String> headers;
     private String verb;
-    private String url;
+    String url;
     private String body;
     private String input;
 
-    HttpRequest(){
+    public HttpRequest(){
         this.headers = new HashMap<>();
     }//for JSON
 
@@ -90,5 +90,13 @@ public class HttpRequest implements Inbound {
             bodyContent = body;
 
         return input + System.lineSeparator() + String.join(System.lineSeparator(), he) + System.lineSeparator() + bodyContent;
+    }
+
+    public void setUrl(String s) {
+        url = s;
+    }
+
+    public void setVerb(String get) {
+        verb = get;
     }
 }

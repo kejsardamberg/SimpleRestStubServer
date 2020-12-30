@@ -9,6 +9,7 @@
         <module name="PluginManager" />
         <module name="Interfaces" />
         <module name="HttpTransportSupport" />
+        <module name="MqTransportSupport" />
         <module name="Core" />
       </profile>
     </annotationProcessing>
@@ -16,6 +17,7 @@
       <module name="Core" target="11" />
       <module name="HttpTransportSupport" target="11" />
       <module name="Interfaces" target="11" />
+      <module name="MqTransportSupport" target="11" />
       <module name="PluginManager" target="11" />
       <module name="ServiceVirtualizationServer" target="11" />
     </bytecodeTargetLevel>

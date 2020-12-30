@@ -1,5 +1,7 @@
 package com.zingtongroup.servicevirtualizationserver.httptransportsupport.servercomponents;
 
+import com.zingtongroup.servicevirtualizationserver.httptransportsupport.clientcomponents.HttpClient2;
+import com.zingtongroup.servicevirtualizationserver.httptransportsupport.clientcomponents.HttpResponseInternal;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.requestfilters.HeaderValueFilter;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.servicevirtualization.PreparedHttpResponse;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.servicevirtualization.RegisteredPreparedHttpResponses;
@@ -45,12 +47,13 @@ public class HttpServer implements Runnable{
             sendAdminPageIfApplicable();
             sendIpIfRequested();
             tendApiIfApplicable();
+            forwardRequestIfAskedFor();
             sendAnyRegisteredNextResponse();
             sendMatchingRegisteredResponse();
             sendUnFilteredPreparedResponse();
             send404IfNothingSentSoFar();
 
-        } catch (IOException | InterruptedException ioe) {
+        } catch (Exception ioe) {
             System.out.println("Server error : " + ioe);
         } finally {
             try {
@@ -66,6 +69,34 @@ public class HttpServer implements Runnable{
                 System.out.println("Connection closed.\n");
             }
         }
+    }
+
+    private void forwardRequestIfAskedFor() throws IOException, InterruptedException {
+        if(!request.getHeaders().containsKey("ServiceVirtualizationForward"))return;
+        String url = request.getHeaders().get("ServiceVirtualizationForward");
+        HttpClient2 client = new HttpClient2();
+        request.url = url;
+        request.getHeaders().remove("ServiceVirtualizationForward");
+        HttpResponseInternal responseInternal = client.sendRequest(request);
+        send(responseInternal);
+        sent = true;
+    }
+
+    private void send(HttpResponseInternal responseInternal) throws IOException {
+        if(responseInternal.headers == null) responseInternal.headers = new HttpHeaders();
+        out.println("HTTP/1.1 " + responseInternal.statusCode + " OK");
+        out.println("Server: ServiceVirtualization");
+        out.println("Date: " + new Date());
+        for(HttpHeader key : responseInternal.headers){
+            out.println(key.name.trim() + ": " + key.value.trim());
+        }
+        if(responseInternal.bodyContent == null) responseInternal.bodyContent = "";
+        out.println("Content-length: " + responseInternal.bodyContent.getBytes().length);
+        out.println(); // blank line between headers and content, very important !
+        out.flush(); // flush character output stream buffer
+
+        dataOut.write(responseInternal.bodyContent.getBytes(), 0, responseInternal.bodyContent.getBytes().length);
+        dataOut.flush();
     }
 
     private void sendLastRequestIfAskedFor() throws IOException {

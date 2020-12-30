@@ -14,6 +14,7 @@
         <module>PluginManager</module>
         <module>Core</module>
         <module>HttpTransportSupport</module>
+        <module>MqTransportSupport</module>
     </modules>
 
     <properties>
