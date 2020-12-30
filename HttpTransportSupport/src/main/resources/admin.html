@@ -781,7 +781,7 @@
 
         function addPreparedResponse() {
             document.getElementById('new').style.display = 'block';
-            document.getElementById('addPreparedResponse').style.display = 'none';
+            //document.getElementById('addPreparedResponse').style.display = 'none';
             document.getElementById('httpClient').style.display = 'none';
         }
 
@@ -804,6 +804,21 @@
 
         function openClient(){
             document.getElementById('httpClient').style.display = 'block';
+        }
+
+        function getZIndex(elem){
+            var zIndex = 0;   
+            if (window.getComputedStyle) {
+                zIndex = parseInt(document.defaultView.getComputedStyle(elem,null).getPropertyValue("zIndex"), 10); 
+                if(isNaN(zIndex)) zIndex = parseInt(document.defaultView.getComputedStyle(elem,null).getPropertyValue("z-index"), 10); 
+
+            }  
+            else if (allElements[i].currentStyle) {
+                zIndex = parseInt(elem.currentStyle["zIndex"], 10);
+            }     
+            if(isNaN(zIndex)) zIndex = 0;
+            return zIndex;
+
         }
 
         function init() {
@@ -949,6 +964,30 @@
             });
             document.getElementById('bodycontenttypedropdown').dispatchEvent(new Event('change'));
             dropdown.dispatchEvent(new Event('change'));
+            document.addEventListener('keydown', function(evt){
+                evt = evt || window.event;
+                var isEscape = false;
+                if ("key" in evt) {
+                    isEscape = (evt.key === "Escape" || evt.key === "Esc");
+                } else {
+                    isEscape = (evt.keyCode === 27);
+                }
+                if (isEscape) {
+                    var allElements = document.querySelectorAll(".overlay");
+                    var topZNumber = 0;
+                    for(var i = 0; i < allElements.length; i++){
+                        if(allElements[i].style.display == "none") continue;
+                        var zIndex = getZIndex(allElements[i]);
+                        if(zIndex > topZNumber) topZNumber = zIndex;
+                    }
+
+                    for(var u = 0; u < allElements.length; u++){
+                        if(getZIndex(allElements[u]) >= topZNumber){
+                            allElements[u].style.display = "none";
+                        }
+                    }
+                }
+            } );
         }
     </script>
 </head>
@@ -956,8 +995,8 @@
 <body onload='init()'>
 <h1>Service virtualization server admin GUI</h1>
 <span class="version">Version 1.4.0</span><br>
-<div id="help" onclick="document.getElementById('help').style.display = 'none';">
-    <h2>Concepts</h2>
+<div id="help" class="overlay" onclick="document.getElementById('help').style.display = 'none';">
+    <h2>Help, instructions, concept descriptions</h2>
     <p>
         A system rarely stands on its own. It almost always have integrations to other systems.
         When testing a system of your own it's easy to use mocks while running unit tests,
@@ -1080,10 +1119,11 @@
     </p>
     <h3>List of future improvement ideas</h3>
     <ul>
-        <li>Include a HTTP client to enable a proxy mode for recording (and to test your own filter mechaisms while creating new prepared responses).</li>
+        <li>Enable editing of prepared responses</li>
+        <li>Enable editing of headers lists</li>
+        <li>Refactor HTML/JS/CSS code heavily</li>
         <li>Expand the body options to include possiblities to modify the prepared response body at runtime, for timestamps and more.</li>
         <li>Prettify the XML or JSON data.</li>
-        <li>Finish flaky HTTP Header management for prepared responses.</li>
         <li>Test with OpenJRE.</li>
         <li>Fix bug so you shouldn't have to refresh page after DELETE</li>
         <li>Create more tests for ease of changes.</li>
@@ -1106,7 +1146,7 @@
     <button id="addPreparedResponse" onclick="addPreparedResponse()">Add...</button>
     <button id="test" onclick="openClient()">Test...</button>
 </div>
-<div id='new'>
+<div id='new' class="overlay">
     <h2>Register new prepared response</h2>
     <div>
         <h3>Response to send</h3>
@@ -1118,7 +1158,7 @@
 
 
 
-        <div id="recordClient">
+        <div id="recordClient" class="overlay">
             <script>
         var clientheaders = [];
         function clientaddheader(){
@@ -1286,7 +1326,7 @@
             onclick="reset()">Cancel</button>
 </div>
 <span id='status'></span>
-<div id="httpClient">
+<div id="httpClient" class="overlay">
     <script>
         var clientheaders = [];
         function clientaddheader(){
