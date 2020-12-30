@@ -38,13 +38,13 @@ public class GuiTest extends ServerTestBase {
 
     @Before
     public void driverSetup(){
-        gui = new Gui(driver, PORT);
         try{
             System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
             driver = new FirefoxDriver();
         }catch (Exception e){
             Assume.assumeNotNull(e.toString(), driver );
         }
+        gui = new Gui(driver, PORT);
     }
 
     @After
