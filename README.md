@@ -39,7 +39,7 @@ You notice the server is running since it is producing a text like this:
      API at http://192.168.1.3:8089/api
      
      Server started.
-     Listening for connections on port : 8023 ...
+     Listening for connections on port : 8089 ...
         
 ### Configuring responses
 Now point your web browser to the given admin URL to configure the utility behaviour.
