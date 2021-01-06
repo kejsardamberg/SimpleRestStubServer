@@ -1,0 +1,3 @@
+com\zingtongroup\servicevirtualizationserver\mqsupport\MqMessage.class
+com\zingtongroup\servicevirtualizationserver\mqsupport\MqMessageHub.class
+com\zingtongroup\servicevirtualizationserver\mqsupport\MqPlugin.class
