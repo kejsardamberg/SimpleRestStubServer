@@ -10,8 +10,8 @@
     <style>
         body {
             margin: 50px;
-            color: white;
-            background-color: #26004d;
+            color: black;
+            background-color: lightsteelblue;
             font-family: Arial, Helvetica, sans-serif;
         }
 
@@ -25,6 +25,60 @@
             margin-top: 0px;
         }
 
+        .tablinksbar {
+            margin: 0px;
+            margin-bottom: 20px;
+            margin-left: 15px;
+            background-color: lightsteelblue;
+            border: none;
+            z-index: 0;
+        }
+
+        .tablink {
+            float: left;
+            border: none;
+            outline: none;
+            color: white;
+            background-color: darkslateblue;
+            cursor: pointer;
+            transition: 0.3s;
+            -webkit-box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8); 
+            box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8);
+        }
+
+        .tablink.active {
+            background-color: #26004d;
+            -webkit-box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8); 
+            box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8);
+        }
+
+        .tablink:hover {
+            -webkit-box-shadow: 0px 0px 32px 10px #000000; 
+            box-shadow: 0px 0px 32px 10px #000000;
+            background-color: dimgray;
+        }
+
+        #tabcontent {
+            margin-top: 0px;
+            background-color: #26004d;
+            -webkit-box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8); 
+            box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8);
+        }
+
+        #mqcontent {
+            display: none;
+        }
+
+        #mqresponseadder {
+            position: absolute;
+            left: 10px;
+            z-index: 1;
+            top: 10px;
+            background-color: cornsilk;
+            color: darkslategray;
+            display: none;
+        }
+
         div {
             border: 1px solid gray;
             padding: 25px;
@@ -32,6 +86,10 @@
             margin: 25px;
             color: white;
             border-radius: 10px;
+        }
+
+        #registeredresponses {
+            display: none;
         }
 
         #field1 {
@@ -165,22 +223,37 @@
         }
 
         #status {
-            color: #3f1a63;
+            color: lightsteelblue;
         }
 
         #help {
             display: none;
             background-color: palegreen;
-            z-index: 1;
-            position: absolute;
-            left: 25px;
-            top: 25px;
             margin-right: 25px;
             margin-bottom: 25px;
             overflow: auto;
             padding: 25px;
             color: black;
             border: 10px solid limegreen;
+        }
+
+        #help .section {
+            border: 1px solid lightsteelblue;
+            padding-left: 25px;
+        }
+
+        .ingress {
+            font-weight: bold;
+        }
+
+        pre.cmd {
+            background-color: black;
+            color: white;
+        }
+
+        pre.json {
+            background-color: black;
+            color: khaki;
         }
 
         #httpClient {
@@ -526,10 +599,6 @@
                 document.getElementById('clientheaders').innerHTML += header.name + ": " + header.value + "<br>";
             }
 
-            saveAsPreparedResponse(){
-                alert('Not yet fully implemented. Sorry.');
-            }
-
             sendrecordrequest() {
                 if(!validateFieldIsNotDefault("recordendpoint")) return;
                 var xhttp = new XMLHttpRequest();
@@ -824,6 +893,15 @@
 
         }
 
+        function setActiveTab(tabContent, tabLinkId){
+            document.getElementById('tabcontent').innerHTML = tabContent;
+            var activeTabs = document.querySelectorAll('.tablink.active');
+            for(var i = 0; i < activeTabs.length; i++){
+                activeTabs[i].classList.remove('active');
+            }
+            document.getElementById(tabLinkId).classList.add("active");
+        }
+
         function init() {
             reset();
             var dropdown = document.getElementById('triggertype');
@@ -991,6 +1069,7 @@
                     }
                 }
             } );
+            document.getElementById('infoButton').click();
         }
     </script>
 </head>
@@ -1000,7 +1079,7 @@
 <span class="version">Version 1.4.0</span><br>
 <div id="help" class="overlay" onclick="document.getElementById('help').style.display = 'none';">
     <h2>Help, instructions, concept descriptions</h2>
-    <p>
+    <p class="ingress">
         A system rarely stands on its own. It almost always have integrations to other systems.
         When testing a system of your own it's easy to use mocks while running unit tests,
         but when rising to system testing level you need the external systems to respond.
@@ -1008,133 +1087,164 @@
         and another challenge is that it's ofter cumbersome and hard to prepare data into the external systems so you can test your own system properly.
         This is of course extra hard for negative testing, with rare error conditions.
     </p>
-    <p>
-        This utility is meant to be able to substitute any REST integration for your system.
+    <p class="ingress">
+        This utility is meant to be able to substitute any REST integration for your system, and any transport/data protocol in the future due to a plugin system.
     </p>
-    <h2>Terminology</h2>
-    <h3>Registered prepared responses</h3>
-    <p>
-        When registering new prepared responses they are combined with a set of filters for when to respond with that particular prepared response.
-    </p>
-    <h3>Prepared responses</h3>
-    <p>
-        This tool uses prepared responses. That is you tell this server what to respond when asked to respond.
-    </p>
-    <p>
-        Responses consist of headers, HTTP status code, and a body.
-    </p>
-    <h4>Body</h4>
-    <p>
-        The body is probably the most important part of any prepared response.
-        It's generally the common way of sending data between systems.
-    </p>
-    <p>
-        There are two types of body content references implemented:
-        One is by direct input.
-        This means that the given body content string will be handed out as body of the response.
-        The other is by file reference.
-        This enables to dynamically produce a file with the content being handed as response upon a request.
-        The file is read at runtime by the server utility, so it must be readable from the server
-        (given firewalls, file system user rights, path format and so forth).
-    </p>
-    <p>
-        The HTTP response body of this utility is a pure bitstream that is served as a string with no stated character encoding.
-    </p>
-    <h4>Headers</h4>
-    <p>
-        The HTTP headers of a response are simplified to only have one value per header.
-    </p>
-    <h4>Status code</h4>
-    <p>
-        Any HTTP response has a status code. Unless stated explicitly the status code is 200 (OK).
-        However, the status code may be set to whatever number you want it to be, for example 404.
-    </p>
-    <h3>Filters/triggers</h3>
-    <p>
-        To enable having multiple different prepared responses at the same time this utility uses a filtering mechanism.
-        These filters are applied on the incoming request to the server.
-        If all filters for a prepared response matches, that response is sent back as answer to the request,
-    </p>
-    <p>
-        If no filters are given, the server responds with the prepared response unless internal paths ('/api', '/admin') are encountered in the incoming request.
-    </p>
-    <p>
-        If several prepared responses matches the filters the first applicable one is sent.
-    </p>
-    <p>
-        The following filters are implemented:
-    </p>
-    <ul>
-        <li><b>Request body contains string</b> (if the request body contains the given string, the response is sent)</li>
-        <li><b>Request body regex match</b> (if the request body matches the given pattern, the response is sent)</li>
-        <li><b>URL End-point equals</b> (if the request URL path equals the given string, the response is sent)</li>
-        <li><b>Header exist</b> (if the request has a header with a name that equals the given string, the response is sent)</li>
-        <li><b>Header value</b> (if the request body contains the given header, equal in both name and value, the response is sent)</li>
-        <li><b>Origin URL host equals</b> (if the request Origin header matches, the response is sent)</li>
-    </ul>
-    <h2>API</h2>
-    <p>
-        The API is accessed by endpoint '/api' to this server. There are a few tricky ways of using this:
-    </p>
-    <h3>POST anything to the API to set next response</h3>
-    <p>
-        POSTing something to the API that doesn't fulfill the object structure of a prepared statement will make the API interprete the POSTed body content as the next body content to supply as a prepared response body.
-    </p>
-    <p>
-        Since the filter used for this POSTed body will be NextResponse it will only be sent once (and not sent at all if end-point '/admin' or '/api' are requested).
-    </p>
-    <p>
-        As an example; if the following POST was performed, the next HTTP request to the server would result in a response with the body content 'username=damberg&password=topsecret'.
-    </p>
-    <pre>
-        curl -X POST -d "username=damberg&password=topsecret" http://localhost:8089/api
-    </pre>
-    <h3>GET</h3>
-    <p>
-        A get request to the '/api' end-point returns all registered prepared responses.
-    </p>
-    <h3>DELETE</h3>
-    <p>
-        A DELETE request should have a JSON body stating what PreparedHttpResponse id to remove.
-    </p>
-    <p>
-        Body example:
-    </p>
-    <pre>
-        {"id":"ae037e4c-3132-4a9b-a2fb-70e30160ff42"}
-    </pre>
-    <p>
-        Or, with curl:
-    </p>
-    <pre>
-                curl -X POST -d "{'id':'ae037e4c-3132-4a9b-a2fb-70e30160ff42'}" http://localhost:8089/api
-    </pre>
-    <h3>POSTing full PreparedHttpResponses</h3>
-    <p>
-        This web page for example uses a more complex structure for POSTing new PreparedHttpResponses.
-    </p>
-    <p>
-        For details on how to use this file, a Swagger file is included in the resources of this server jar file (open as a zip file and browse to the resources).
-    </p>
-    <h2>Notes</h2>
-    <p>
-        This utility is built with extendability in mind. It should(tm) be able to incorporate other technologies, apart from the HTTP protocol, as well.
-    </p>
-    <h3>List of future improvement ideas</h3>
-    <ul>
-        <li>Enable editing of prepared responses</li>
-        <li>Enable editing of headers lists</li>
-        <li>Refactor HTML/JS/CSS code heavily</li>
-        <li>Expand the body options to include possiblities to modify the prepared response body at runtime, for timestamps and more.</li>
-        <li>Prettify the XML or JSON data.</li>
-        <li>Test with OpenJRE.</li>
-        <li>Fix bug so you shouldn't have to refresh page after DELETE</li>
-        <li>Create more tests for ease of changes.</li>
-        <li>Check if HTML formatted prepared response bodies manages less-than and more-than correct server-side (especially for recorded messages)</li>
-    </ul>
-    <button id="closeHelpButton" onclick="document.getElementById('help').style.display = 'none';">Close</button>
+    <div class="section">
+        <h2>Terminology</h2>
+        <div class="section">
+            <h3>Registered prepared responses</h3>
+            <p>
+                When registering new <b><i>Prepared Responses</i></b> they are combined with a set of <b><i>filters</i></b> for when to respond with that particular prepared response.
+            </p>
+            <br />
+            <h3>Prepared responses</h3>
+            <p>
+                This tool uses prepared responses. That is you tell this server what to respond when asked to respond.
+            </p>
+            <p>
+                Responses consist of headers, HTTP status code, and a body.
+            </p>
+            <br />
+            <h4>Body</h4>
+            <p>
+                The body is probably the most important part of any prepared response.
+                It's generally the common way of sending data between systems.
+            </p>
+            <p>
+                There are two types of body content references implemented:
+                One is by direct input.
+                This means that the given body content string will be handed out as body of the response.
+                The other is by file reference.
+                This enables to dynamically produce a file with the content being handed as response upon a request.
+                The file is read at runtime by the server utility, so it must be readable from the server
+                (given firewalls, file system user rights, path format and so forth).
+            </p>
+            <p>
+                The HTTP response body of this utility is a pure bitstream that is served as a string with no stated character encoding.
+            </p>
+            <br />
+            <h4>Headers</h4>
+            <p>
+                The HTTP headers of a response are simplified to only have one value per header.
+            </p>
+            <br />
+            <h4>Status code</h4>
+            <p>
+                Any HTTP response has a status code. Unless stated explicitly the status code is 200 (OK).
+                However, the status code may be set to whatever number you want it to be, for example 404.
+            </p>
+        </div>
+        <div class="section">
+            <h3>Filters/triggers</h3>
+            <p>
+                To enable having multiple different prepared responses at the same time this utility uses a filtering mechanism.
+                These filters are applied on the incoming request to the server.
+                If all filters for a prepared response matches, that response is sent back as answer to the request,
+            </p>
+            <p>
+                If no filters are given, the server responds with the prepared response unless internal paths ('/api', '/admin') are encountered in the incoming request.
+            </p>
+            <p>
+                If several prepared responses matches the filters the first applicable one is sent.
+            </p>
+            <p>
+                The following filters are implemented:
+            </p>
+            <ul>
+                <li><b>Request body contains string</b> (if the request body contains the given string, the response is sent)</li>
+                <li><b>Request body regex match</b> (if the request body matches the given pattern, the response is sent)</li>
+                <li><b>URL End-point equals</b> (if the request URL path equals the given string, the response is sent)</li>
+                <li><b>Header exist</b> (if the request has a header with a name that equals the given string, the response is sent)</li>
+                <li><b>Header value</b> (if the request body contains the given header, equal in both name and value, the response is sent)</li>
+                <li><b>Origin URL host equals</b> (if the request Origin header matches, the response is sent)</li>
+            </ul>
+        </div>
+    </div>
+    <div class="section">
+        <h2>API</h2>
+        <p>
+            The API is accessed by endpoint '/api' to this server. There are a few tricky ways of using this:
+        </p>
+        <br />
+        <h3>POST anything to the API to set next response</h3>
+        <p>
+            POSTing something to the API that doesn't fulfill the object structure of a prepared statement will make the API interprete the POSTed body content as the next body content to supply as a prepared response body.
+        </p>
+        <p>
+            Since the filter used for this POSTed body will be NextResponse it will only be sent once (and not sent at all if end-point '/admin' or '/api' are requested).
+        </p>
+        <p>
+            As an example; if the following POST was performed, the next HTTP request to the server would result in a response with the body content 'username=damberg&password=topsecret'.
+        </p>
+        <pre class="cmd">
+
+curl -X POST -d "username=damberg&password=topsecret" http://localhost:8089/api
+        </pre>
+        <br />
+        <h3>GET</h3>
+        <p>
+            A get request to the '/api' end-point returns all registered prepared responses.
+        </p>
+        <br />
+        <h3>DELETE</h3>
+        <p>
+            A DELETE request should have a JSON body stating what PreparedHttpResponse id to remove.
+        </p>
+        <p>
+            Body example:
+        </p>
+        <pre class="json">
+
+{"id":"ae037e4c-3132-4a9b-a2fb-70e30160ff42"}
+        </pre>
+        <p>
+            Or, with curl:
+        </p>
+        <pre class="cmd">
+
+curl -X POST -d "{'id':'ae037e4c-3132-4a9b-a2fb-70e30160ff42'}" http://localhost:8089/api
+        </pre>
+        <br />
+        <h3>POSTing full PreparedHttpResponses</h3>
+        <p>
+            This web page for example uses a more complex structure for POSTing new PreparedHttpResponses.
+        </p>
+        <p>
+            For details on how to use this file, a Swagger file is included in the resources of this server jar file (open as a zip file and browse to the resources).
+        </p>
+    </div>
+    <div class="section">
+        <h2>Notes</h2>
+        <p>
+            This utility is built with extendability in mind. It should(tm) be able to incorporate other technologies, apart from the HTTP protocol, as well.
+        </p>
+        <br />
+        <h3>List of future improvement ideas</h3>
+        <ul>
+            <li>Enable editing of prepared responses</li>
+            <li>Enable editing of headers lists</li>
+            <li>Refactor HTML/JS/CSS code heavily</li>
+            <li>Make MQ stubbing work properly</li>
+            <li>Expand the body options to include possiblities to modify the prepared response body at runtime, for timestamps and more</li>
+            <li>Prettify the XML or JSON data.</li>
+            <li>Test with OpenJRE</li>
+            <li>Verifications - API to query server side to assert incoming request</li>
+            <li>Fix bug so you shouldn't have to refresh page after DELETE</li>
+            <li>Create more tests for ease of changes</li>
+            <li>Check if HTML formatted prepared response bodies manages less-than and more-than correct server-side (especially for recorded messages)</li>
+        </ul>
+    </div>
 </div>
-<button id="infoButton" onclick="document.getElementById('help').style.display = 'block';">Info...</button>
+
+<div class="tablinksbar">
+    <button id="httpButton" class="tablink" onclick="setActiveTab(document.getElementById('registeredresponses').innerHTML, 'httpButton');">HTTP / REST</button>
+    <button id="mqButton" class="tablink" onclick="setActiveTab(document.getElementById('mqcontent').innerHTML, 'mqButton');">MQ / JMS</button>
+    <button id="infoButton" class="tablink" onclick="setActiveTab(document.getElementById('help').innerHTML, 'infoButton');">Info / Help</button>
+</div>
+<div id="tabcontent">
+
+</div>
 <div id='registeredresponses'>
     <h2>Registered prepared responses</h2>
     <table id="registeredResponsesTable">
@@ -1436,6 +1546,36 @@
         <button onclick="clearreceivedresponse()">Clear</button>
     </div>
     <button id="closeclientbutton" onclick="document.getElementById('httpClient').style.display = 'none';">Close</button>
+</div>
+
+<div id="mqcontent">
+    <div>Terribly sorry, but the MQ functionality is not yet implemented to satisfaction. Sorry..!<br />Please check back later.</div>
+    <div id="mqresponseadder">
+        <h2>Message to send</h2>
+        <label for="mqbody">Message content:</label>
+        <textarea id="mqbody" value=""></textarea>
+        <br />
+        <h2>Filter (what triggers to send this message)</h2>
+        <label for="mqtopic">Topic:</label>
+        <input type="text" id="mqtopic" value="" />
+        <br />
+        <button onclick="addMqPreparedResponse();">Add</button>
+        <button onclick="document.getElementById('mqresponseadder').style.display = 'none';">Close</button>
+    </div>
+    <h3>Registered responses</h3>
+    <table id="registeredMQResponses">
+        <tr>
+            <th>Response trigger</th>
+            <th>Response delay (ms)</th>
+            <th>Response content</th>
+        </tr>
+        <tr>
+            <td>Topic: 'players'</td>
+            <td>0</td>
+            <td>[{'name':'elfvind', 'id': 25, 'score': 221}, {'name':'bengt', 'id': 26, 'score': 88}]</td>
+        </tr>
+    </table>
+    <button id="addMQResponse" onclick="document.getElementById('mqresponseadder').style.display = 'block';">Add...</button>
 </div>
 </body>
 
