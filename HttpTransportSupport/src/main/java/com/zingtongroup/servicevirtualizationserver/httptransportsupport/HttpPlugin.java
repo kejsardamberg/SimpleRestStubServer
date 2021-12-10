@@ -19,13 +19,13 @@ public class HttpPlugin implements Plugin {
     public HttpServer httpServer;
     private Thread serverThread;
 
-    public HttpPlugin(Integer port){
+    public HttpPlugin(Integer port) {
         this(port, true);
     }
 
-    public HttpPlugin(Integer port, boolean instatiateFromFile){
+    public HttpPlugin(Integer port, boolean instantiateFromFile) {
         if(port != null) PORT = port;
-        if(instatiateFromFile)  RegisteredPreparedHttpResponses.getInstance().initiateFromFile();
+        if(instantiateFromFile)  RegisteredPreparedHttpResponses.getInstance().initiateFromFile();
         if(RegisteredPreparedHttpResponses.getInstance().registeredResponses.size() == 0){
             HttpResponseToSend  responseToSend = new HttpResponseToSend(200, "Hello world");
             responseToSend.headers.add(new HttpHeader("Content-Type", "text/plain"));
@@ -44,15 +44,15 @@ public class HttpPlugin implements Plugin {
             ServerSocket serverConnect = new ServerSocket(PORT);
             System.out.println("Service Virtualization REST server");
             System.out.println("==================================");
-            System.out.println("Admin interface at http://" + Inet4Address.getLocalHost().getHostAddress() + ":" + PORT + "/admin");
-            System.out.println("API at http://" + Inet4Address.getLocalHost().getHostAddress() + ":" + PORT + "/api\n");
+            System.out.println("Admin interface at http://" + Inet4Address.getLocalHost().getHostAddress() + ":" + PORT + PropertiesManager.getPropertiesInstance().get("adminGuiEndpoint"));
+            System.out.println("API at http://" + Inet4Address.getLocalHost().getHostAddress() + ":" + PORT + PropertiesManager.getPropertiesInstance().get("apiEndpointRootPath") + System.lineSeparator());
             System.out.println("Server started.\nListening for connections on port : " + PORT + " ...");
 
             // we listen until user halts server execution
             while (serverThread == null || serverThread.isAlive()) {
                 httpServer = new HttpServer(serverConnect.accept());
 
-                System.out.println("Connecton opened. (" + new Date() + ")");
+                System.out.println("Connection opened. (" + new Date() + ")");
 
                 // create dedicated thread to manage the client connection
                 serverThread = new Thread(httpServer);

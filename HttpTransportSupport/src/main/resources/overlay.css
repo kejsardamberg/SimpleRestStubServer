@@ -1,0 +1,31 @@
+.overlay {
+    position: absolute;
+    background-color: var(--zingtonLightBeige);
+    opacity: 1;
+    display: none;
+    left: 40px;
+    top: 40px;
+    border: 4px solid gray;
+    z-index: 2;
+    -webkit-box-shadow: 8px 10px 15px -4px #000000;
+    box-shadow: 8px 10px 15px -4px #000000;
+}
+
+.overlayTitlebar {
+    cursor: move;
+    padding-left: 10px;
+    background-color: gray;
+    color: white;
+    border: 1px solid var(--zingtonDarkBlue);
+}
+
+.closeOverlayX {
+    float: right;
+    background-color: var(--zingtonRed);
+    color: var(--zingtonWhite);
+    border: 1px solid (--zingtonDarkBlue);
+    cursor: pointer;
+}
+
+.closeOverlayX:hover {
+}

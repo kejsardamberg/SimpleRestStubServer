@@ -17,7 +17,7 @@ public class ServerTestBase {
     static Thread serverThread;
 
     @BeforeClass
-    public static void setup() throws InterruptedException {
+    public static void setup() throws InterruptedException, IOException {
         plugin = new TestPlugin(PORT);
         serverThread = new Thread(plugin);
         serverThread.start();
@@ -129,7 +129,7 @@ public class ServerTestBase {
     public static class TestPlugin extends HttpPlugin implements Runnable {
 
 
-        public TestPlugin(Integer port) {
+        public TestPlugin(Integer port) throws IOException {
             super(port, false);
         }
 

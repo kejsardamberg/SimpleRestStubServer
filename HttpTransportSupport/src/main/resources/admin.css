@@ -1,0 +1,298 @@
+
+        :root {
+            --zingtonRed: red;
+            --zingtonDarkBlue: #211E57;
+            --zingtonBeige: #EFEEE7;
+            --zingtonLightBeige: #FFFFFF;
+            --zingtonWhite: white;
+            --zingtonLightBlue: skyblue;
+        }
+
+        body {
+            margin-top: 100px;
+            margin-left: 50px;
+            margin-right: 50px;
+            margin-bottom: 100px;
+            color: var(--zingtonDarkBlue);
+            background-color: var(--zingtonBeige);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        button {
+            background-color: var(--zingtonDarkBlue);
+            color: var(--zingtonWhite);
+            border: none;
+        }
+
+        button:disabled {
+            background-color: lightgray;
+            border: 1px solid darkslategray;
+        }
+
+        button:hover {
+            box-shadow: 0px 0px 9px rgba(95, 95, 99, 1);
+            cursor: pointer;
+        }
+
+        #topmenu {
+            position: fixed;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 25px;
+            padding-bottom: 25px;
+            font-size: larger;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            background-color: var(--zingtonLightBeige);
+            color: var(--zingtonDarkBlue);
+            z-index: 1;
+            box-shadow: 0 4px 2px -2px gray;
+        }
+
+        #topmenu .logo {
+            font-weight: bold;
+        }
+
+        #topmenu .menuoption {
+            float: right;
+            margin-right: 25px;
+        }
+
+        #topmenu .menuoption:hover {
+            font-weight: bold;
+            text-shadow: 0px 0px 9px rgba(95, 95, 99, 1);
+        }
+
+        #topmenu .menuoption.active {
+            font-weight: bold;
+        }
+
+        .menuOptionDisplaySection {
+            margin-bottom: 150px;
+        }
+
+        .additiongui {
+            background-color: var(--zingtonBeige);
+        }
+
+        .panel {
+            margin-top: 10px;
+            padding: 20px;
+            border: 1px solid var(--zingtonDarkBlue);
+        }
+
+        .note {
+            padding: 20px;
+            border: 2px solid yellow;
+            background-color: var(--zingtonLightBeige);
+        }
+
+        .version {
+            font-style: italic;
+            font-size: small;
+        }
+
+        h4 {
+            margin-bottom: 5px;
+            margin-top: 0px;
+        }
+
+        #registeredResponsesTable {
+            border: 3px solid var(--zingtonDarkBlue);
+            border-collapse: collapse;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+
+        img.tableicon {
+            cursor: pointer;
+            height: 25px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        #registeredResponsesTable tr:nth-child(even) {background: var(--zingtonLightBeige);}
+        #registeredResponsesTable tr:nth-child(odd) {background: var(--zingtonBeige);}
+
+        #registeredResponsesTable td {
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        #registeredResponsesTable th {
+            background-color: var(--zingtonDarkBlue);
+            color: white;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        #registeredResponsesTable .statuscodecell {
+            text-align: center;
+            margin: 5px;
+        }
+
+        #registeredResponsesTable .delaycell {
+            text-align: center;
+            margin: 5px;
+        }
+
+        #registeredResponsesTable .headerscell {
+            margin: 5px;
+        }
+
+        #field1 {
+            display: none;
+        }
+
+        #field2 {
+            display: none;
+        }
+
+        .infoIcon {
+            height: 1em;
+        }
+
+        #triggerTypeInfoOverlay {
+            background-color: var(--zingtonBeige);
+            padding: 15px;
+            position: absolute;
+            bottom: 15px;
+            right: 140px;
+        }
+
+        textarea {
+            background-color: white;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px;
+            margin: 10px;
+            margin-left: 0px;
+        }
+
+        #new {
+            margin-bottom: 50px;
+            left: 20px;
+            top: 100px;
+        }
+
+        #triggertypedescription{
+            display: none;
+            position: relative;
+        }
+
+        #advancedHttp {
+            display: none;
+        }
+
+        #new #recordClient {
+            display: none;
+            position: absolute;
+            color: black;
+            left: 10px;
+            top: 10px;
+            z-index: 2;
+            background-color: crimson;
+            border: 4px solid black;
+        }
+
+        #new #recordClient div {
+            background-color: crimson;
+            color: black;
+        }
+
+        #httpEdit {
+            left: 50px;
+            top: 100px;
+        }
+
+        th {
+            text-align: left;
+            padding-right: 15px;
+        }
+
+        td {
+            padding-right: 15px;
+        }
+
+        .nopadding {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Tooltip text */
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            padding: 5px 0;
+            border-radius: 6px;
+
+            /* Position the tooltip text */
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+
+            /* Fade in tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Tooltip arrow */
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+        /* Show the tooltip text when you mouse over the tooltip container */
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+
+        #status {
+            color: var(--background-light);
+        }
+
+        #httpClient {
+            display: none;
+            position: absolute;
+            color: black;
+            left: 10px;
+            margin: 30px;
+            top: 10px;
+            z-index: 1;
+            background-color: skyblue;
+            border: 4px solid black;
+        }
+
+        .responsevalue {
+            background-color: skyblue;
+            color: black;
+        }
+
+        #triggertypedescription {
+            color: darkslategray;
+        }

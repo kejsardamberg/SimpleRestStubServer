@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                margin: 5%;
+            }
+            
+            #control {
+                background-image: url("data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width='40px' height='40px'><foreignObject width='40px' height='40px'><div xmlns='http://www.w3.org/1999/xhtml' style='width:40px;height:40px;line-height:40px;text-align:center;color:transparent;text-shadow: 0 0 yellow, 2px 4px black, -1px -1px black;font-size:35px;'>💬</div></foreignObject></svg>");
+                cursor: pointer;
+                position: absolute;
+                width: 40px;
+                height: 40px;
+            }
+
+            #control::before{
+                background-color: black;
+                color: white;
+                content: " tweet this! ";
+                display: block;
+                font-weight: bold;
+                margin-left: 37px;
+                margin-top: 6px;
+                padding: 2px;
+                width: max-content;
+                height: 20px;
+            }
+
+            #textbody {
+                border: 1px solid rgb(158, 175, 175);
+                padding: 1%;
+            }
+
+            .numberinput{
+                width: 30px;
+            }
+
+            .substitutedDate {
+                color: white;
+                background-color: darkslateblue;
+            }
+        </style>
+        <script>
+            /*
+            class BodyContent{
+                constructor(instring){
+                    this.wordArray = instring.split();
+                    this.rootElement = document.createElement('div');
+                    this.rootElement.id = "bodycontent";
+                    for(var i = 0; i < this.wordArray.length(); i++){
+                        var word = document.createElement('span');
+                        word.classList.add('bodyword');
+                        word.innerHTML = this.wordArray[i];
+                        word.addEventListener('click', function(){
+
+                        })
+                    }
+                }
+
+                generate(){
+                    String.join(this.contentArray, " ");
+                }
+            }
+
+            var control = document.importNode(document.querySelector('template').content, true).childNodes[0];
+            document.querySelector('p').onpointerup = () => {
+            let selection = document.getSelection(), text = selection.toString();
+            if (text !== "") {
+                let rect = selection.getRangeAt(0).getBoundingClientRect();
+                control.style.top = `calc(${rect.top}px - 48px)`;
+                control.style.left = `calc(${rect.left}px + calc(${rect.width}px / 2) - 40px)`;
+                control['text']= text; 
+                document.body.appendChild(control);
+                }
+            }
+
+            control.addEventListener('pointerdown', oncontroldown, true);
+
+            function oncontroldown(event) {
+                window.open(`https://twitter.com/intent/tweet?text=${this.text}`)
+                this.remove();
+                document.getSelection().removeAllRanges();
+                event.stopPropagation();
+            }
+
+            document.onpointerdown = ()=> {    
+                let control = document.querySelector('#control');
+                if (control !== null) {control.remove();document.getSelection().removeAllRanges();}
+            }
+            */
+
+            function convertSelectedTextToCurrentDate(){
+                var selectionText = window.getSelection().toString();
+                var text = document.getElementById('textbody').innerHTML;
+                var startIndex = text.indexOf(selectionText);
+                var newSpan = document.createElement('span');
+                var bodyElement = document.getElementById('textbody').innerHTML = text.substring(0, startIndex);
+
+                newSpan.innerHTML =  + "<span class='substitutedDate'>Current date formatted as '" + document.getElementById("dateformatting").value + "'";
+                if(document.getElementById("addedDays").value != 0) newSpan.innerHTML += ", added " + document.getElementById("addedDays").value + " days";
+                if(document.getElementById("addedHours").value != 0) newSpan.innerHTML += ", added " + document.getElementById("addedHours").value + " hours";
+                if(document.getElementById("addedMinutes").value != 0) newSpan.innerHTML += ", added " + document.getElementById("addedMinutes").value + " minutes";
+                if(document.getElementById("addedSeconds").value != 0) newSpan.innerHTML += ", added " + document.getElementById("addedSeconds").value + " seconds";
+                newSpan.innerHTML += ".</span>" + text.substring(startIndex + selectionText.length, text.length);
+                document.getElementById('textbody').innerHTML = newText;
+            }
+        </script>
+    </head>
+    <body>
+        <div id="textbody" style="width: 100%" oncontextmenu="javascript:alert('text: ' + document.getSelection().toString());return false;">
+            <span class="unmodifiedtext">
+                Cascading Style Sheets (CSS) is a style sheet language used for describing the presentation of a document written in a markup language such as HTML. CSS is a cornerstone technology of the World Wide Web, alongside HTML and JavaScript. CSS is designed to enable the separation of presentation and content, including layout, colors, and fonts. This separation can improve content accessibility, provide more flexibility and control in the specification of presentation characteristics.
+            </span>
+        </div>
+        
+        <br />
+
+        <button id="dateselection" onclick="convertSelectedTextToCurrentDate()">Substitute selected text with current date</button>
+
+        Added time:
+        <label for="addedDays">Days:</label>
+        <input type="number" class="numberinput" id="addedDays" value="0">
+
+        <label for="addedHours">Hours:</label>
+        <input type="number" class="numberinput" id="addedHours" value="0">
+
+        <label for="addedMinutes">Minutes:</label>
+        <input type="number" class="numberinput" id="addedMinutes" value="0">
+
+        <label for="addedSeconds">Seconds:</label>
+        <input type="number" class="numberinput" id="addedSeconds" value="0">
+
+        <label for="dateformatting">Date format:</label>
+        <input type="text" id="dateformatting" value="yyyyMMdd HH:mm:SS">
+
+        <br />
+
+        <button id="csvFilePathSubstitution">Read value sequentially from CSV file at runtime</button>
+        <label for="csvColumnNumber">Column number:</label>
+        <input type="number" class="numberinput" id="csvColumnNumber" value="1">
+        <label for="csvStartIndex">Line start index:</label>
+        <input type="number" class="numberinput" id="csvStartIndex" value="0">
+        <label id="csvFilePath">CSV file path:</label><button>Browse...</button>
+
+    </body>
+</html>

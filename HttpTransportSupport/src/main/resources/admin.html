@@ -7,854 +7,45 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <style>
-        body {
-            margin: 50px;
-            color: black;
-            background-color: lightsteelblue;
-            font-family: Arial, Helvetica, sans-serif;
-        }
 
-        .version {
-            font-style: italic;
-            font-size: small;
-        }
+    <script src="htmlconversion.js"></script>
+    <script src="http.js"></script>
+    
+    
+    <script src="overlay.js"></script>
+    <link rel="stylesheet" href="overlay.css">
+    
+    <script src="httpclientoverlay.js"></script>
+    <script src="RegisterPreparedHttpResponse.js"></script>
+    <script src="mqresponseadder.js"></script>
 
-        h4 {
-            margin-bottom: 5px;
-            margin-top: 0px;
-        }
-
-        .tablinksbar {
-            margin: 0px;
-            margin-bottom: 20px;
-            margin-left: 15px;
-            background-color: lightsteelblue;
-            border: none;
-            z-index: 0;
-        }
-
-        .tablink {
-            float: left;
-            border: none;
-            outline: none;
-            color: white;
-            background-color: darkslateblue;
-            cursor: pointer;
-            transition: 0.3s;
-            -webkit-box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8); 
-            box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8);
-        }
-
-        .tablink.active {
-            background-color: #26004d;
-            -webkit-box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8); 
-            box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8);
-        }
-
-        .tablink:hover {
-            -webkit-box-shadow: 0px 0px 32px 10px #000000; 
-            box-shadow: 0px 0px 32px 10px #000000;
-            background-color: dimgray;
-        }
-
-        #tabcontent {
-            margin-top: 0px;
-            background-color: #26004d;
-            -webkit-box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8); 
-            box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.8);
-        }
-
-        #mqcontent {
-            display: none;
-        }
-
-        #mqresponseadder {
-            position: absolute;
-            left: 10px;
-            z-index: 1;
-            top: 10px;
-            background-color: cornsilk;
-            color: darkslategray;
-            display: none;
-        }
-
-        div {
-            border: 1px solid gray;
-            padding: 25px;
-            background-color: #00264d;
-            margin: 25px;
-            color: white;
-            border-radius: 10px;
-        }
-
-        #registeredresponses {
-            display: none;
-        }
-
-        #field1 {
-            display: none;
-        }
-
-        #field2 {
-            display: none;
-        }
-
-        textarea {
-            background-color: white;
-            width: 100%;
-        }
-
-        button {
-            padding: 10px;
-            margin: 10px;
-            margin-left: 0px;
-        }
-
-        #new {
-            display: none;
-            z-index: 1;
-            border: 10px solid DarkKhaki;
-            position: absolute;
-            top: 10px;
-            color: darkslategray;
-            left: 10px;
-            background-color: LemonChiffon;
-            margin-bottom: 50px;
-        }
-
-        #new div {
-            border: 1px solid DarkKhaki;
-            padding: 25px;
-            background-color: LightYellow;
-            margin: 25px;
-            color: darkslategray;
-            border-radius: 10px;
-        }
-
-        #new #recordClient {
-            display: none;
-            position: absolute;
-            color: black;
-            left: 10px;
-            top: 10px;
-            z-index: 2;
-            background-color: crimson;
-            border: 4px solid black;
-        }
-
-        #new #recordClient div {
-            background-color: crimson;
-            color: black;
-        }
-
-        th {
-            text-align: left;
-            padding-right: 15px;
-        }
-
-        td {
-            padding-right: 15px;
-            color: white;
-        }
-
-        .nopadding {
-            padding: 0px;
-            margin: 0px;
-        }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            border-bottom: 1px dotted black;
-            /* If you want dots under the hoverable text */
-        }
-
-        /* Tooltip text */
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 120px;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            padding: 5px 0;
-            border-radius: 6px;
-
-            /* Position the tooltip text */
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -60px;
-
-            /* Fade in tooltip */
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        /* Tooltip arrow */
-        .tooltip .tooltiptext::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #555 transparent transparent transparent;
-        }
-
-        /* Show the tooltip text when you mouse over the tooltip container */
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .popup {
-            z-index: 1;
-            position: fixed;
-            left: 10px;
-            top: 10px;
-            overflow: scroll;
-            padding: 15px;
-            color: darkslategray;
-            background-color: white;
-            border: 10px solid gray;
-        }
-
-        #status {
-            color: lightsteelblue;
-        }
-
-        #help {
-            display: none;
-            background-color: palegreen;
-            margin-right: 25px;
-            margin-bottom: 25px;
-            overflow: auto;
-            padding: 25px;
-            color: black;
-            border: 10px solid limegreen;
-        }
-
-        #help .section {
-            border: 1px solid lightsteelblue;
-            padding-left: 25px;
-        }
-
-        .ingress {
-            font-weight: bold;
-        }
-
-        pre.cmd {
-            background-color: black;
-            color: white;
-        }
-
-        pre.json {
-            background-color: black;
-            color: khaki;
-        }
-
-        #httpClient {
-            display: none;
-            position: absolute;
-            color: black;
-            left: 10px;
-            top: 10px;
-            z-index: 1;
-            background-color: skyblue;
-            border: 4px solid black;
-        }
-
-        .responsevalue {
-            background-color: skyblue;
-            color: black;
-        }
-
-        #triggertypedescription {
-            color: darkslategray;
-        }
-    </style>
+    <link rel="stylesheet" href="admin.css">
+    
     <script>
 
-        function textToHtml(texte) {
-            if(texte === null) return null;
-            texte = texte.replace(/"/g, '&quot;'); // 34 22
-            texte = texte.replace(/&/g, '&amp;'); // 38 26
-            texte = texte.replace(/\'/g, '&#39;'); // 39 27
-            texte = texte.replace(/</g, '&lt;'); // 60 3C
-            texte = texte.replace(/>/g, '&gt;'); // 62 3E
-            texte = texte.replace(/\^/g, '&circ;'); // 94 5E
-            texte = texte.replace(/‘/g, '&lsquo;'); // 145 91
-            texte = texte.replace(/’/g, '&rsquo;'); // 146 92
-            texte = texte.replace(/“/g, '&ldquo;'); // 147 93
-            texte = texte.replace(/”/g, '&rdquo;'); // 148 94
-            texte = texte.replace(/•/g, '&bull;'); // 149 95
-            texte = texte.replace(/–/g, '&ndash;'); // 150 96
-            texte = texte.replace(/—/g, '&mdash;'); // 151 97
-            texte = texte.replace(/˜/g, '&tilde;'); // 152 98
-            texte = texte.replace(/™/g, '&trade;'); // 153 99
-            texte = texte.replace(/š/g, '&scaron;'); // 154 9A
-            texte = texte.replace(/›/g, '&rsaquo;'); // 155 9B
-            texte = texte.replace(/œ/g, '&oelig;'); // 156 9C
-            //texte = texte.replace(//g,'&#357;'); // 157 9D
-            texte = texte.replace(/ž/g, '&#382;'); // 158 9E
-            texte = texte.replace(/Ÿ/g, '&Yuml;'); // 159 9F
-            // texte = texte.replace(/ /g,'&nbsp;'); // 160 A0
-            texte = texte.replace(/¡/g, '&iexcl;'); // 161 A1
-            texte = texte.replace(/¢/g, '&cent;'); // 162 A2
-            texte = texte.replace(/£/g, '&pound;'); // 163 A3
-            //texte = texte.replace(/ /g,'&curren;'); // 164 A4
-            texte = texte.replace(/¥/g, '&yen;'); // 165 A5
-            texte = texte.replace(/¦/g, '&brvbar;'); // 166 A6
-            texte = texte.replace(/§/g, '&sect;'); // 167 A7
-            texte = texte.replace(/¨/g, '&uml;'); // 168 A8
-            texte = texte.replace(/©/g, '&copy;'); // 169 A9
-            texte = texte.replace(/ª/g, '&ordf;'); // 170 AA
-            texte = texte.replace(/«/g, '&laquo;'); // 171 AB
-            texte = texte.replace(/¬/g, '&not;'); // 172 AC
-            texte = texte.replace(/­/g, '&shy;'); // 173 AD
-            texte = texte.replace(/®/g, '&reg;'); // 174 AE
-            texte = texte.replace(/¯/g, '&macr;'); // 175 AF
-            texte = texte.replace(/°/g, '&deg;'); // 176 B0
-            texte = texte.replace(/±/g, '&plusmn;'); // 177 B1
-            texte = texte.replace(/²/g, '&sup2;'); // 178 B2
-            texte = texte.replace(/³/g, '&sup3;'); // 179 B3
-            texte = texte.replace(/´/g, '&acute;'); // 180 B4
-            texte = texte.replace(/µ/g, '&micro;'); // 181 B5
-            texte = texte.replace(/¶/g, '&para'); // 182 B6
-            texte = texte.replace(/·/g, '&middot;'); // 183 B7
-            texte = texte.replace(/¸/g, '&cedil;'); // 184 B8
-            texte = texte.replace(/¹/g, '&sup1;'); // 185 B9
-            texte = texte.replace(/º/g, '&ordm;'); // 186 BA
-            texte = texte.replace(/»/g, '&raquo;'); // 187 BB
-            texte = texte.replace(/¼/g, '&frac14;'); // 188 BC
-            texte = texte.replace(/½/g, '&frac12;'); // 189 BD
-            texte = texte.replace(/¾/g, '&frac34;'); // 190 BE
-            texte = texte.replace(/¿/g, '&iquest;'); // 191 BF
-            texte = texte.replace(/À/g, '&Agrave;'); // 192 C0
-            texte = texte.replace(/Á/g, '&Aacute;'); // 193 C1
-            texte = texte.replace(/Â/g, '&Acirc;'); // 194 C2
-            texte = texte.replace(/Ã/g, '&Atilde;'); // 195 C3
-            texte = texte.replace(/Ä/g, '&Auml;'); // 196 C4
-            texte = texte.replace(/Å/g, '&Aring;'); // 197 C5
-            texte = texte.replace(/Æ/g, '&AElig;'); // 198 C6
-            texte = texte.replace(/Ç/g, '&Ccedil;'); // 199 C7
-            texte = texte.replace(/È/g, '&Egrave;'); // 200 C8
-            texte = texte.replace(/É/g, '&Eacute;'); // 201 C9
-            texte = texte.replace(/Ê/g, '&Ecirc;'); // 202 CA
-            texte = texte.replace(/Ë/g, '&Euml;'); // 203 CB
-            texte = texte.replace(/Ì/g, '&Igrave;'); // 204 CC
-            texte = texte.replace(/Í/g, '&Iacute;'); // 205 CD
-            texte = texte.replace(/Î/g, '&Icirc;'); // 206 CE
-            texte = texte.replace(/Ï/g, '&Iuml;'); // 207 CF
-            texte = texte.replace(/Ð/g, '&ETH;'); // 208 D0
-            texte = texte.replace(/Ñ/g, '&Ntilde;'); // 209 D1
-            texte = texte.replace(/Ò/g, '&Ograve;'); // 210 D2
-            texte = texte.replace(/Ó/g, '&Oacute;'); // 211 D3
-            texte = texte.replace(/Ô/g, '&Ocirc;'); // 212 D4
-            texte = texte.replace(/Õ/g, '&Otilde;'); // 213 D5
-            texte = texte.replace(/Ö/g, '&Ouml;'); // 214 D6
-            texte = texte.replace(/×/g, '&times;'); // 215 D7
-            texte = texte.replace(/Ø/g, '&Oslash;'); // 216 D8
-            texte = texte.replace(/Ù/g, '&Ugrave;'); // 217 D9
-            texte = texte.replace(/Ú/g, '&Uacute;'); // 218 DA
-            texte = texte.replace(/Û/g, '&Ucirc;'); // 219 DB
-            texte = texte.replace(/Ü/g, '&Uuml;'); // 220 DC
-            texte = texte.replace(/Ý/g, '&Yacute;'); // 221 DD
-            texte = texte.replace(/Þ/g, '&THORN;'); // 222 DE
-            texte = texte.replace(/ß/g, '&szlig;'); // 223 DF
-            texte = texte.replace(/à/g, '&aacute;'); // 224 E0
-            texte = texte.replace(/á/g, '&aacute;'); // 225 E1
-            texte = texte.replace(/â/g, '&acirc;'); // 226 E2
-            texte = texte.replace(/ã/g, '&atilde;'); // 227 E3
-            texte = texte.replace(/ä/g, '&auml;'); // 228 E4
-            texte = texte.replace(/å/g, '&aring;'); // 229 E5
-            texte = texte.replace(/æ/g, '&aelig;'); // 230 E6
-            texte = texte.replace(/ç/g, '&ccedil;'); // 231 E7
-            texte = texte.replace(/è/g, '&egrave;'); // 232 E8
-            texte = texte.replace(/é/g, '&eacute;'); // 233 E9
-            texte = texte.replace(/ê/g, '&ecirc;'); // 234 EA
-            texte = texte.replace(/ë/g, '&euml;'); // 235 EB
-            texte = texte.replace(/ì/g, '&igrave;'); // 236 EC
-            texte = texte.replace(/í/g, '&iacute;'); // 237 ED
-            texte = texte.replace(/î/g, '&icirc;'); // 238 EE
-            texte = texte.replace(/ï/g, '&iuml;'); // 239 EF
-            texte = texte.replace(/ð/g, '&eth;'); // 240 F0
-            texte = texte.replace(/ñ/g, '&ntilde;'); // 241 F1
-            texte = texte.replace(/ò/g, '&ograve;'); // 242 F2
-            texte = texte.replace(/ó/g, '&oacute;'); // 243 F3
-            texte = texte.replace(/ô/g, '&ocirc;'); // 244 F4
-            texte = texte.replace(/õ/g, '&otilde;'); // 245 F5
-            texte = texte.replace(/ö/g, '&ouml;'); // 246 F6
-            texte = texte.replace(/÷/g, '&divide;'); // 247 F7
-            texte = texte.replace(/ø/g, '&oslash;'); // 248 F8
-            texte = texte.replace(/ù/g, '&ugrave;'); // 249 F9
-            texte = texte.replace(/ú/g, '&uacute;'); // 250 FA
-            texte = texte.replace(/û/g, '&ucirc;'); // 251 FB
-            texte = texte.replace(/ü/g, '&uuml;'); // 252 FC
-            texte = texte.replace(/ý/g, '&yacute;'); // 253 FD
-            texte = texte.replace(/þ/g, '&thorn;'); // 254 FE
-            texte = texte.replace(/ÿ/g, '&yuml;'); // 255 FF
-            return texte;
-        }
+        var trashbinImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABXUExURQAAAG51fTg+SiErNSIsNjI6RSAqNCIqNx8sNW50gDc/SiIrNCAtNh4rMztBTTpCTSIqNTpDTCErNzlBTCAqMyAqNiErNB8rNyEqMyIsODpBSztCTAAAAB6COrQAAAAddFJOU/////////////////////////////////////8AWYbnagAAAAlwSFlzAAAOwwAADsMBx2+oZAAAARhJREFUOE/dktl2wjAMRAMKxuzC0ITF//+dnZHlOKF96HMFJzORr2Q7R12eYrUW6e2/XnkK0YBNkG0URNxK2HhyBuy4hno0YOw83YB9Waix93QDDsi6zbAHtw1gmduFn4DjEji6bcAJp3MLoD+5BXCWgAo/vES7KYKJIOfcXfgWRCm+aKJWJ5fuKgk/Mokpfge3tnDt8k3knqzBFx8MM5ruIrdySDa1E80uyJ2oBij2oC6BpNTSAWemwqlW59d2IA5Uutph8G0d+G2LGcA7UZEexwYE6t86/Ez/V8CnuAF1yg0Y8eGpADBy1Q0j1YBHUn5tREIUFzQ9JuBZcp/xnIAXqrinF1Pwml4TkN8cOq2z33PGo7yxkPM3HZpD834RSOgAAAAASUVORK5CYII=";
+        var penImage = "data:image/png;base64,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";
+        var infoImage = "data:image/png;base64,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";
 
-        function validateFieldIsNotDefault(id){
-            var field = document.getElementById(id);
-            if(!field)return false;
-            if(field.value === field.getAttribute("originalValue")){
-                document.getElementById(id).setAttribute("originalBGColor", document.getElementById(id).style.backgroundColor);
-                document.getElementById(id).style.backgroundColor = "red";
-                setTimeout(function(){
-                    document.getElementById(id).style.backgroundColor = document.getElementById(id).getAttribute("originalBGColor");
-                }, 200);
-                return false;
-            }
-            return true;
-        }
+        var preparedStatement = { };
 
-        class HttpResponse {
-            constructor(statusCode, body, headers){
-
-            }
-        }
-
-        class HttpRequest {
-            constructor(url, method, body, headers){
-                this.url = url;
-                this.method = method;
-                this.headers = headers;
-                this.body = body;
-            }
-
-            send(){
-                var xhttp = new XMLHttpRequest();
-                xhttp.open(this.method, this.url, false);
-                xhttp.send(this.body);
-                return new HttpResponse(xhttp.status, xhttp.responseText, xhttp.getAllResponseHeaders());
-            }
-        }
-
-        class FieldWithLabel{
-            constructor(label, id, defaultText){
-                var container = document.createElement("div");
-                container.classList.add(id);
-                container.classList.add("textFieldContainer");
-                var labelElement = document.createElement("label");
-                labelElement.setAttribute("for", id);
-                labelElement.classList.add("textFieldLabel");
-                labelElement.innerHTML = label;
-                container.appendChild(labelElement);
-                var field = document.createElement("input");
-                field.type = "text";
-                field.id = id;
-                field.value = defaultText;
-                field.setAttribute("originalValue", defaultText);
-                container.appendChild(field);
-                return container;
-            }
-        }
-
-        class HeaderDefinitionGui {
-            constructor(){
-                this.clientRequestHeaders = [];
-                var headersDiv = document.createElement("div");
-                this.headersList = document.createElement("table");
-                headersList.classList.add = "recordheaders";
-                requestDiv.appendChild(headersList);
-                this.headerName = new FieldWithLabel("Header name:", "recordresponseheadername", "");
-                requestDiv.appendChild(this.headerName);
-                this.headerValue = new FieldWithLabel("Header value:", "recordresponseheadervalue", "");
-                requestDiv.appendChild(this.headerValue);
-                
-                var addHeaderBtn = document.createElement("button");
-                addHeaderBtn.innerHTML = "Add header";
-                addHeaderBtn.onclick = this.addRequestHeader();
-                addHeaderBtn.id = "recordaddheaderbutton";
-                requestDiv.appendChild(addHeaderBtn);
-                return requestDiv;
-            }
-
-            get headers(){
-                return this.clientRequestHeaders;
-            }
-
-            addRequestHeader(){
-                if(!validateFieldIsNotDefault("recordresponseheadername") || !validateFieldIsNotDefault("recordresponseheadervalue"))return;
-                var header = {};
-                header.name = this.headerName.value;
-                header.value = this.headerValue.value;
-                this.clientRequestHeaders.push(header);
-                this.headersList.innerHTML = "";
-                for(var i = 0; i < this.clientRequestHeaders.length; i++){
-                    var registeredHeaderDiv = document.createElement("tr");
-                    registeredHeaderDiv.setId("registeredHeaderNr" + i);
-                    var registeredHeaderName = document.createElement("td");
-                    registeredHeaderName.innerHTML = this.clientRequestHeaders[i].name;
-                    registeredHeaderDiv.appendChild(registeredHeaderName);
-                    var registeredHeaderValue = document.createElement("td");
-                    registeredHeaderValue.innerHTML = this.clientRequestHeaders[i].value;
-                    registeredHeaderDiv.appendChild(registeredHeaderValue);
-                    var buttonTd = document.createElement("td");
-                    var deleteButton = document.createElement("button");
-                    deleteButton.onclick = this.clientRequestHeaders.pop(this.clientRequestHeaders[i]);
-                    buttonTd.appendChild(deleteButton);
-                    registeredHeaderDiv.appendChild(buttonTd);
-                    this.headersList.appendChild(registeredHeaderDiv);
-                }
-                this.headersList.innerHTML += header.name + ": " + header.value + "<br>";
-            }
-
-
-        }
-
-        class RequestDefinitionGui {
-            constructor(){
-                var requestDiv = document.createElement("div");
-
-                var requestheading = document.createElement("h3");
-                requestheading.innerHTML = "Request";
-                requestDiv.appendChild(requestheading);
-
-                requestDiv.appendChild(new FieldWithLabel("URL:", "recordendpoint"), "http://");
-                requestDiv.appendChild(new FieldWithLabel("Method:", "recordmethod", "GET"));
-                var requestBodyArea = document.createElement("textarea");
-                requestBodyArea.id = "recordbody";
-                requestDiv.appendChild(requestBodyArea);
-
-                var headersDiv = document.createElement("div");
-                headersDiv.innerHTML = "Headers:";
-                this.headersGui = new HeaderDefinitionGui();
-                requestDiv.appendChild(this.headersGui);
-
-                var sendRequestBtn = document.createElement("button");
-                sendRequestBtn.innerHTML = "Send";
-                sendRequestBtn.onclick = this.sendrecordrequest();
-                sendRequestBtn.id = "recordsendbutton";
-                requestDiv.appendChild(sendRequestBtn);
-            }
-        }
-
-        class ResponseRecorder {
-            constructor(){
-                this.clientRequestHeaders = [];
-                var recorder = document.createElement("div");
-                recorder.classList.add("recordClient");
-
-                var heading = document.createElement("h2");
-                heading.innerHTML = "HTTP record client";
-                recorder.appendChild(heading);
-
-                var requestDiv = document.createElement("div");
-
-                var requestheading = document.createElement("h3");
-                requestheading.innerHTML = "Request";
-                requestDiv.appendChild(requestheading);
-
-                requestDiv.appendChild(new FieldWithLabel("URL:", "recordendpoint"), "http://");
-                requestDiv.appendChild(new FieldWithLabel("Method:", "recordmethod", "GET"));
-                var requestBodyArea = document.createElement("textarea");
-                requestBodyArea.id = "recordbody";
-                requestDiv.appendChild(requestBodyArea);
-
-                var headersDiv = document.createElement("div");
-                headersDiv.innerHTML = "Headers:";
-                requestDiv.appendChild(headersDiv);
-
-                var headersList = document.createElement("span");
-                headersList.id = "recordheaders";
-                requestDiv.appendChild(headersList);
-                requestDiv.appendChild(new FieldWithLabel("Header name:", "recordresponseheadername", ""));
-                requestDiv.appendChild(new FieldWithLabel("Header value:", "recordresponseheadervalue", ""));
-                
-                var addHeaderBtn = document.createElement("button");
-                addHeaderBtn.innerHTML = "Add header";
-                addHeaderBtn.onclick = this.addRequestHeader();
-                addHeaderBtn.id = "recordaddheaderbutton";
-                requestDiv.appendChild(addHeaderBtn);
-
-                var sendRequestBtn = document.createElement("button");
-                sendRequestBtn.innerHTML = "Send";
-                sendRequestBtn.onclick = this.sendrecordrequest();
-                sendRequestBtn.id = "recordsendbutton";
-                requestDiv.appendChild(sendRequestBtn);
-
-                recorder.appendChild(requestDiv);
-
-                var responseDiv = document.createElement("div");
-                var respHeading = document.createElement("h3");
-                respHeading.innerHTML = "Response";
-
-                recorder.appendChild(responseDiv);
-                return recorder;
-            }
-
-            addRequestHeader(){
-                if(!validateFieldIsNotDefault("clientresponseheadername") || !validateFieldIsNotDefault("clientresponseheadervalue"))return;
-                var header = {};
-                header.name = document.getElementById('clientresponseheadername').value;
-                header.value = document.getElementById('clientresponseheadervalue').value;
-                this.clientRequestHeaders.push(header);
-                document.getElementById('clientheaders').innerHTML += header.name + ": " + header.value + "<br>";
-            }
-
-            sendrecordrequest() {
-                if(!validateFieldIsNotDefault("recordendpoint")) return;
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                    if (this.readyState == 4) {
-                        document.getElementById('saverecordedbutton').disabled = false;
-                        document.getElementById('clearrecordedresponsebutton').disabled = false;
-                        document.getElementById('recordresponsebodyvalue').innerHTML = textToHtml(this.responseText);
-                        document.getElementById('recordstatuscodevalue').innerHTML = this.status;
-                    }
-                };
-                xhttp.open(document.getElementById('recordmethod').value, "/sgsdfjfdsfgf", false);
-                xhttp.setRequestHeader('ServiceVirtualizationForward', document.getElementById('recordendpoint').value);
-                xhttp.send(document.getElementById('recordbody').value);
-            }
-
-            clearreceivedrecordresponse() {
-                document.getElementById('recordresponseheaders').innerHTML = '';
-                document.getElementById('recordstatuscodevalue').innerHTML = '';
-                document.getElementById('recordresponsebodyvalue').innerHTML = '';
-                document.getElementById('saverecordedbutton').disabled = true;
-                document.getElementById('clearrecordedresponsebutton').disabled = true;
-            }
-
-        }
-
-        function update() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var trs = document.querySelectorAll('#registeredResponsesTable tr');
-                    for (var j = 1; j < trs.length; j++) {
-                        trs[j].parentNode.removeChild(trs[j]);
-                    }
-                    document.getElementById('status').innerHTML = this.status + ": " + this.responseText;
-                    var json = JSON.parse(this.responseText);
-                    var registeredResponses = json.registeredResponses;
-                    for (var i = 0; i < registeredResponses.length; i++) {
-                        var tr = document.createElement('tr');
-                        tr.setAttribute('id', registeredResponses[i].id);
-                        var trigger = document.createElement('td');
-                        var triggers = registeredResponses[i].filters;
-                        var triggerstrings = [];
-                        if(triggers !== null){
-                            for(var s = 0; s < triggers.length; s++){
-                                triggerstrings.push(triggers[s].description);
-                            }
-                        }
-                        trigger.innerHTML = triggerstrings.join("<br>");
-                        tr.appendChild(trigger);
-                        var headers = document.createElement('td');
-                        var headerstrings = [];
-                        if(registeredResponses[i].httpResponse !== null && registeredResponses[i].httpResponse.headers !== null){
-                            for(var y = 0; y < registeredResponses[i].httpResponse.headers.length ; y++){
-                                headerstrings.push(registeredResponses[i].httpResponse.headers[y].name + ": " + registeredResponses[i].httpResponse.headers[y].value );
-                            }
-                        }
-                        headers.innerHTML = headerstrings.join("<br>");
-                        tr.appendChild(headers);
-                        var body = document.createElement('td');
-                        body.classList.add('body');
-                        body.classList.add('tooltip');
-                        var bodyText =  textToHtml(registeredResponses[i].httpResponse.body);
-                        if(bodyText === null || bodyText.length === 0){
-                            bodyText =  textToHtml(registeredResponses[i].httpResponse.bodyFilePath);
-                        }
-                        var displayText = registeredResponses[i].httpResponse.bodyType + ": " + bodyText;
-                        if (displayText.length > 120) {
-                            displayText = displayText.substring(0, 117) + '...';
-                        }
-                        body.innerHTML = displayText;
-                        body.addEventListener('click', function (evt) {
-                            var textPopup = document.createElement('div');
-                            var textArea = document.createElement('pre');
-                            textArea.innerHTML = evt.target.querySelector('span').innerHTML;
-                            textPopup.appendChild(textArea);
-                            textPopup.classList.add('popup');
-                            textPopup.addEventListener('click', function () {
-                                var popups = document.querySelectorAll('.popup');
-                                for (var i = 0; i < popups.length; i++) {
-                                    popups[i].parentNode.removeChild(popups[i]);
-                                }
-                            });
-                            document.querySelector('body').appendChild(textPopup);
-                        });
-                        var bodyTooltip = document.createElement('span');
-                        bodyTooltip.classList.add('tooltiptext');
-                        bodyTooltip.innerHTML = bodyText;
-                        body.appendChild(bodyTooltip);
-                        tr.appendChild(body);
-                        var statusCode = document.createElement('td');
-                        statusCode.innerHTML = registeredResponses[i].httpResponse.responseCode;
-                        tr.appendChild(statusCode);
-                        var delay = document.createElement('td');
-                        delay.innerHTML = registeredResponses[i].delay;
-                        tr.appendChild(delay);
-                        var buttonCell = document.createElement('td');
-                        var button = document.createElement('button');
-                        button.innerHTML = "Delete";
-                        button.setAttribute('onclick', 'deleteEntry(this);');
-                        buttonCell.appendChild(button);
-                        tr.appendChild(buttonCell);
-                        document.querySelector('#registeredresponses table').appendChild(tr);
-                    }
-                }
-            };
-            xhttp.open("GET", "/api", true);
-            xhttp.setRequestHeader("Content-type", "application/json");
-            xhttp.send();
-        }
-
-        function send() {
+        function postToApi() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     reset();
-                    document.getElementById('status').innerHTML = this.status;
+                    console.log("Last response:\n\rResponse code: " + this.status + "\n\rResponse body content:\n\r" + this.responseText + "\n\r");
                 }
             };
             xhttp.open("POST", "/api", true);
             xhttp.setRequestHeader("Content-type", "application/json");
-            //alert('Sending: ' + JSON.stringify(preparedStatement));
             xhttp.send(JSON.stringify(preparedStatement));
         }
 
-        var preparedStatement = { };
-
-        function addheader() {
-            var headername = document.getElementById('responseheadername').value;
-            var headervalue = document.getElementById('responseheadervalue').value;
-            if(headername.length === 0) {
-                document.getElementById('responseheadername').style.backgroundColor = 'red';
-                setTimeout(function(){
-                    document.getElementById('responseheadername').style.backgroundColor = 'white';
-                }, 200);
-                return;
-            }
-            if(headervalue.length === 0) {
-                document.getElementById('responseheadervalue').style.backgroundColor = 'red';
-                setTimeout(function(){
-                    document.getElementById('responseheadervalue').style.backgroundColor = 'white';
-                }, 200);
-                return;
-            }
-            var header = {};
-            header.name = headername;
-            header.value = headervalue;
-            preparedStatement.httpResponse.headers.push(header);
-            document.getElementById('responseheadername').value = '';
-            document.getElementById('responseheadervalue').value = '';
-            updateHeadersList();
-        }
-
-        function updateHeadersList(){
-            var div = document.getElementById('headervalues');
-            div.innerHTML = '';
-            if(preparedStatement.httpResponse.headers.length === 0){
-                div.style.display = 'none';
-            } else {
-                div.style.display = 'block';
-            }
-            for(var i = 0; i < preparedStatement.httpResponse.headers.length; i++){
-                div.innerHTML += preparedStatement.httpResponse.headers[i].name + ": " + preparedStatement.httpResponse.headers[i].value + "<br>";
-            }
-        }
-
-        function submit() {
-            if(!preparedStatement.httpResponse) preparedStatement.httpResponse = {};
-            if(document.getElementById('bodycontenttypedropdown').value == 'direct'){
-                preparedStatement.httpResponse.body = document.getElementById('responsebodycontent').value;
-                preparedStatement.httpResponse.bodyType = 'direct';
-            } else {
-                preparedStatement.httpResponse.bodyFilePath = document.getElementById('bodycontentfilepath').value;
-                preparedStatement.httpResponse.bodyType = 'file';
-            }
-            preparedStatement.httpResponse.responseCode = document.getElementById('responsecode').value;
-            preparedStatement.delay = document.getElementById('delay').value;
-            send();
-            document.getElementById('new').style.display = 'none';
-            document.getElementById('addPreparedResponse').style.display = 'block';
-        }
-
-        function addRequestFilter(){
-            var triggertype = document.getElementById('triggertype').value;
-            if(document.getElementById('field1').style.display == 'block' && document.getElementById('field1').value.length === 0) {
-                document.getElementById('field1').style.backgroundColor = 'red';
-                setTimeout(function(){
-                    document.getElementById('field1').style.backgroundColor = 'white';
-                }, 200);
-                return;
-            }
-            if(document.getElementById('field2').style.display == 'block' && document.getElementById('field2').value.length === 0) {
-                document.getElementById('field2').style.backgroundColor = 'red';
-                setTimeout(function(){
-                    document.getElementById('field2').style.backgroundColor = 'white';
-                }, 200);
-                return;
-            }
-            var filter = {};
-            filter.type = triggertype;
-            filter.field1 = document.getElementById('field1').value;
-            filter.field2 = document.getElementById('field2').value;
-            preparedStatement.filters.push(filter);
-            updateFilterList();
-        }
-
-        function updateFilterList(){
-            var div = document.getElementById('registeredtriggers');
-            if(preparedStatement.filters.length === 0){
-                div.style.display = 'none';
-            } else {
-                div.style.display = 'block';
-            }
-            div.innerHTML = '';
-            var innertext = '';
-            for(var i = 0; i < preparedStatement.filters.length; i++){
-                innertext += preparedStatement.filters[i].type;
-                if(preparedStatement.filters[i].type != 'next')
-                    innertext += ": ";
-
-                if(preparedStatement.filters[i].field1)
-                    innertext += "'" + preparedStatement.filters[i].field1 + "'";
-
-                if(preparedStatement.filters[i].field2)
-                    innertext += ", '" + preparedStatement.filters[i].field2 + "'";
-
-                innertext += "<br>";
-            }
-            div.innerHTML = innertext;
-        }
-
-        function uuidv4() {
-          return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-          });
-        }
 
         function reset() {
-            document.getElementById('new').style.display = 'none';
             document.getElementById('addPreparedResponse').style.display = 'block';
-            preparedStatement = {};
-            preparedStatement.id = uuidv4();
-            preparedStatement.delay = 0;
-            preparedStatement.httpResponse = {};
-            preparedStatement.httpResponse.headers = [];
-            preparedStatement.filters = [];
-            update();
-            updateFilterList();
-            updateHeadersList();
-        }
-
-        function addPreparedResponse() {
-            document.getElementById('new').style.display = 'block';
-            //document.getElementById('addPreparedResponse').style.display = 'none';
-            document.getElementById('httpClient').style.display = 'none';
+            preparedStatement = new PreparedHttpResponse();
         }
 
         function deleteEntry(button){
@@ -863,7 +54,7 @@
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById('status').innerHTML = this.status + ": " + this.responseText;
+                    console.log("Last response:\n\rResponse code: " + this.status + "\n\rResponse body content:\n\r" + this.responseText + "\n\r");
                     setTimeout(function(){
                         update();
                     }, 600);
@@ -872,10 +63,6 @@
             xhttp.open("DELETE", "/api", true);
             xhttp.setRequestHeader("Content-type", "application/json");
             xhttp.send('{"id":"' + id + '"}');
-        }
-
-        function openClient(){
-            document.getElementById('httpClient').style.display = 'block';
         }
 
         function getZIndex(elem){
@@ -893,145 +80,62 @@
 
         }
 
-        function setActiveTab(tabContent, tabLinkId){
-            document.getElementById('tabcontent').innerHTML = tabContent;
-            var activeTabs = document.querySelectorAll('.tablink.active');
-            for(var i = 0; i < activeTabs.length; i++){
-                activeTabs[i].classList.remove('active');
+        function unactivateMenuOptions(){
+            var menuoptions = document.querySelectorAll(".menuoption");
+            for(var i = 0; i < menuoptions.length; i++){
+                if(!menuoptions[i].classList.contains('active')) continue;
+                menuoptions[i].classList.remove('active');
             }
-            document.getElementById(tabLinkId).classList.add("active");
         }
 
-        function init() {
-            reset();
-            var dropdown = document.getElementById('triggertype');
-            dropdown.addEventListener('change', function(){
-                var triggertype = document.getElementById('triggertype').value;
-                switch(triggertype) {
-                    case 'NextResponse':
-                        document.getElementById('field1').value = "";
-                        document.getElementById('field2').value = "";
-                        document.getElementById('field1label').innerHTML = "";
-                        document.getElementById('field1label').style.display = 'none';
-                        document.getElementById('field1').style.display = 'none';
-                        document.getElementById('field2label').innerHTML = "";
-                        document.getElementById('field2label').style.display = 'none';
-                        document.getElementById('field2').style.display = 'none';
-                        document.getElementById('triggertypedescription').innerHTML = 'Sends the request above once only, as the next server response.';
-                        break;
-                    case 'OriginUrlFilter':
-                        document.getElementById('field1').value = "";
-                        document.getElementById('field2').value = "";
-                        var xhttp = new XMLHttpRequest();
-                        xhttp.onreadystatechange = function () {
-                            if (this.readyState == 4 && this.status == 200) {
-                                var ipaddress = "e.g. 'http://127.0.0.1:8080'";
-                                if(this.responseText !== null){
-                                    ipaddress = "your address is '" + this.responseText + "'";
-                                }
-                                document.getElementById('field1label').innerHTML = "Origing URL (" + ipaddress + "):";
-                            }
-                        };
-                        xhttp.open("GET", "/api/ip", true);
-                        xhttp.send();
-                        document.getElementById('field1label').style.display = 'block';
-                        document.getElementById('field1').style.display = 'block';
-                        document.getElementById('field2label').innerHTML = "";
-                        document.getElementById('field2label').style.display = 'none';
-                        document.getElementById('field2').style.display = 'none';
-                        document.getElementById('triggertypedescription').innerHTML = 'Checks the Origin header for the incomming request and if it matches the registered response is sent.';
-                        break;
-                    case 'EndpointUrlFilter':
-                        document.getElementById('field1').value = "";
-                        document.getElementById('field2').value = "";
-                        document.getElementById('field1label').innerHTML = "End-point path (e.g. '/api/v1/resourses/persons'):";
-                        document.getElementById('field1label').style.display = 'block';
-                        document.getElementById('field1').style.display = 'block';
-                        document.getElementById('field2label').innerHTML = "";
-                        document.getElementById('field2label').style.display = 'none';
-                        document.getElementById('field2').style.display = 'none';
-                        document.getElementById('triggertypedescription').innerHTML = 'Parses the end-point path of the incoming request. If it matches the registered response is sent.';
-                        break;
-                    case 'HeaderExistFilter':
-                        document.getElementById('field1').value = "";
-                        document.getElementById('field2').value = "";
-                        document.getElementById('field1label').innerHTML = "Header name to exist:";
-                        document.getElementById('field1label').style.display = 'block';
-                        document.getElementById('field1').style.display = 'block';
-                        document.getElementById('field2label').innerHTML = "";
-                        document.getElementById('field2label').style.display = 'none';
-                        document.getElementById('field2').style.display = 'none';
-                        document.getElementById('triggertypedescription').innerHTML = 'Checks if the header with the given name is found on the incoming request. If it does the registered response is sent.';
-                        break;
-                    case 'TimePeriodFilter':
-                        document.getElementById('field1').value = "";
-                        document.getElementById('field2').value = "";
-                        document.getElementById('field1label').innerHTML = "Start time (HH:mm:SS):";
-                        document.getElementById('field1label').style.display = 'block';
-                        document.getElementById('field1').style.display = 'block';
-                        document.getElementById('field2label').innerHTML = "Stop time (HH:mm:SS):";
-                        document.getElementById('field2label').style.display = 'block';
-                        document.getElementById('field2').style.display = 'block';
-                        document.getElementById('triggertypedescription').innerHTML = 'Checks time (server side) for the incoming request. If current time is between given start time and stop time the registered response is sent.';
-                        break;
-                    case 'HeaderValueFilter':
-                        document.getElementById('field1').value = "";
-                        document.getElementById('field2').value = "";
-                        document.getElementById('field1label').innerHTML = "Header name:";
-                        document.getElementById('field1label').style.display = 'block';
-                        document.getElementById('field1').style.display = 'block';
-                        document.getElementById('field2label').innerHTML = "Header value:";
-                        document.getElementById('field2label').style.display = 'block';
-                        document.getElementById('field2').style.display = 'block';
-                        document.getElementById('triggertypedescription').innerHTML = 'Checks the incoming request for a header matching the given parameters. If it does the registered response is sent.';
-                        break;
-                    case 'BodyRegexMatchFilter':
-                        document.getElementById('field1').value = "";
-                        document.getElementById('field2').value = "";
-                        document.getElementById('field1label').innerHTML = "Regular expression pattern for match:";
-                        document.getElementById('field1label').style.display = 'block';
-                        document.getElementById('field1').style.display = 'block';
-                        document.getElementById('field2label').innerHTML = "";
-                        document.getElementById('field2label').style.display = 'none';
-                        document.getElementById('field2').style.display = 'none';
-                        document.getElementById('triggertypedescription').innerHTML = 'Matches the incoming request body with the given pattern. If a match is found the registered response is sent.';
-                        break;
-                    case 'HttpMethodVerbFilter':
-                        document.getElementById('field1').value = "";
-                        document.getElementById('field2').value = "";
-                        document.getElementById('field1label').innerHTML = "HTTP request verb to match:";
-                        document.getElementById('field1label').style.display = 'block';
-                        document.getElementById('field1').style.display = 'block';
-                        document.getElementById('field2label').innerHTML = "";
-                        document.getElementById('field2label').style.display = 'none';
-                        document.getElementById('field2').style.display = 'none';
-                        document.getElementById('triggertypedescription').innerHTML = 'Checks the incoming request body if the given verb (GET, POST, DELETE, PUT, etc.) matches this field value. If a match is found the registered response is sent.';
-                        break;
-                    case 'BodyContainsMatchFilter':
-                        document.getElementById('field1').value = "";
-                        document.getElementById('field2').value = "";
-                        document.getElementById('field1label').innerHTML = "String to find:";
-                        document.getElementById('field1label').style.display = 'block';
-                        document.getElementById('field1').style.display = 'block';
-                        document.getElementById('field2label').innerHTML = "";
-                        document.getElementById('field2label').style.display = 'none';
-                        document.getElementById('field2').style.display = 'none';
-                        document.getElementById('triggertypedescription').innerHTML = 'Checks the incoming request body if it contains the given string. If a match is found the registered response is sent.';
-                        break;
-                    default:
-                        document.getElementById('field1').value = "";
-                        document.getElementById('field2').value = "";
-                        document.getElementById('field1label').innerHTML = "Oups. This should not happen...!";
-                        document.getElementById('field1label').style.display = 'block';
-                        document.getElementById('field1').style.display = 'block';
-                        document.getElementById('field1').value = 'OUPS!';
-                        document.getElementById('field2label').innerHTML = "";
-                        document.getElementById('field2label').style.display = 'none';
-                        document.getElementById('field2').style.display = 'none';
-                        document.getElementById('triggertypedescription').innerHTML = 'Nooooo... Needs updating.';
-                        break;
+        function hideDisplays(){
+            var displays = document.querySelectorAll(".menuOptionDisplaySection");
+            for(var i = 0; i < displays.length; i++){
+                displays[i].style.display = "none";
+            }
+        }
+
+        function addListenersToMenuOptions() {
+            var menuoptions = document.querySelectorAll(".menuoption");
+            for(var i = 0; i < menuoptions.length; i++){
+                menuoptions[i].addEventListener('click', function(evt){
+                    unactivateMenuOptions();
+                    evt.target.classList.add('active');
+                    hideDisplays();
+                    var displayId = evt.target.getAttribute('target');
+                    document.getElementById(displayId).style.display = 'block';
+                });
+            }
+        }
+
+        function editHttpResponse(elem){
+            var id = elem.parentNode.parentNode.getAttribute('id');
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    console.log("Last response:\n\rResponse code: " + xhttp.status + "\n\rResponse body content:\n\r" + xhttp.responseText + "\n\r");
+                    var registeredPreparedResponses = JSON.parse(xhttp.responseText);
+                    for(var i = 0; i < registeredPreparedResponses.registeredResponses.length; i++){
+                        if(registeredPreparedResponses.registeredResponses[i].id === id){
+                            var overlay = new Overlay('Edit prepared HTTP response', new RegisterPreparedHttpResponse(registeredPreparedResponses.registeredResponses[i]).rootElement, this);
+                        }
+                    }
                 }
-            });
+            }.bind(this);
+            xhttp.open("GET", "/api", true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.send('{"id":"' + id + '"}');
+
+        }
+
+
+        function init() {
+            //customElements.define('register-prepared-http-response', RegisterPreparedHttpResponse);
+            reset();
+            var registeredHttpRequestsTable = new PreparedHttpResponsesTable(document.getElementById('registeredHttpResponses'));
+            addListenersToMenuOptions();
+            hideDisplays();
+            /*
             document.getElementById('bodycontenttypedropdown').addEventListener('change', function(){
                 if(document.getElementById('bodycontenttypedropdown').value == 'direct'){
                     document.getElementById('responsebodycontent').style.display = 'block';
@@ -1044,539 +148,94 @@
                 }
             });
             document.getElementById('bodycontenttypedropdown').dispatchEvent(new Event('change'));
-            dropdown.dispatchEvent(new Event('change'));
-            document.addEventListener('keydown', function(evt){
-                evt = evt || window.event;
-                var isEscape = false;
-                if ("key" in evt) {
-                    isEscape = (evt.key === "Escape" || evt.key === "Esc");
-                } else {
-                    isEscape = (evt.keyCode === 27);
-                }
-                if (isEscape) {
-                    var allElements = document.querySelectorAll(".overlay");
-                    var topZNumber = 0;
-                    for(var i = 0; i < allElements.length; i++){
-                        if(allElements[i].style.display == "none") continue;
-                        var zIndex = getZIndex(allElements[i]);
-                        if(zIndex > topZNumber) topZNumber = zIndex;
-                    }
-
-                    for(var u = 0; u < allElements.length; u++){
-                        if(getZIndex(allElements[u]) >= topZNumber){
-                            allElements[u].style.display = "none";
-                        }
-                    }
-                }
-            } );
-            document.getElementById('infoButton').click();
+            */
+            //dropdown.dispatchEvent(new Event('change'));
+            var overlayManager = new OverlayManager();
+            overlayManager.addEscapeKeyListenerToCloseTopMostOverlay();
         }
     </script>
 </head>
 
 <body onload='init()'>
-<h1>Service virtualization server admin GUI</h1>
-<span class="version">Version 1.4.0</span><br>
-<div id="help" class="overlay" onclick="document.getElementById('help').style.display = 'none';">
-    <h2>Help, instructions, concept descriptions</h2>
-    <p class="ingress">
-        A system rarely stands on its own. It almost always have integrations to other systems.
-        When testing a system of your own it's easy to use mocks while running unit tests,
-        but when rising to system testing level you need the external systems to respond.
-        A problem with this is that you don't know if the external systems are in sync with you with their functionality,
-        and another challenge is that it's ofter cumbersome and hard to prepare data into the external systems so you can test your own system properly.
-        This is of course extra hard for negative testing, with rare error conditions.
-    </p>
-    <p class="ingress">
-        This utility is meant to be able to substitute any REST integration for your system, and any transport/data protocol in the future due to a plugin system.
-    </p>
-    <div class="section">
-        <h2>Terminology</h2>
+    
+    <section id="topmenu">
+        <span class="logo">Zington Stub Server</span>
+        <span class="menuoption" target="httpdisplay">HTTP/REST</span>
+        <span class="menuoption" target="mqdisplay">MQ/JMS</span>
+        <span class="menuoption" target="infodisplay">INFO</span>
+    </section>
+
+    <section id="infodisplay" class="menuOptionDisplaySection" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;">
+        <object data="help.html" width="100%" height="100%"> 
+            Your browser doesn’t support the object tag. 
+        </object>
+    </section>
+
+
+    <section id="httpdisplay" class="menuOptionDisplaySection">
         <div class="section">
-            <h3>Registered prepared responses</h3>
-            <p>
-                When registering new <b><i>Prepared Responses</i></b> they are combined with a set of <b><i>filters</i></b> for when to respond with that particular prepared response.
-            </p>
-            <br />
-            <h3>Prepared responses</h3>
-            <p>
-                This tool uses prepared responses. That is you tell this server what to respond when asked to respond.
-            </p>
-            <p>
-                Responses consist of headers, HTTP status code, and a body.
-            </p>
-            <br />
-            <h4>Body</h4>
-            <p>
-                The body is probably the most important part of any prepared response.
-                It's generally the common way of sending data between systems.
-            </p>
-            <p>
-                There are two types of body content references implemented:
-                One is by direct input.
-                This means that the given body content string will be handed out as body of the response.
-                The other is by file reference.
-                This enables to dynamically produce a file with the content being handed as response upon a request.
-                The file is read at runtime by the server utility, so it must be readable from the server
-                (given firewalls, file system user rights, path format and so forth).
-            </p>
-            <p>
-                The HTTP response body of this utility is a pure bitstream that is served as a string with no stated character encoding.
-            </p>
-            <br />
-            <h4>Headers</h4>
-            <p>
-                The HTTP headers of a response are simplified to only have one value per header.
-            </p>
-            <br />
-            <h4>Status code</h4>
-            <p>
-                Any HTTP response has a status code. Unless stated explicitly the status code is 200 (OK).
-                However, the status code may be set to whatever number you want it to be, for example 404.
-            </p>
-        </div>
-        <div class="section">
-            <h3>Filters/triggers</h3>
-            <p>
-                To enable having multiple different prepared responses at the same time this utility uses a filtering mechanism.
-                These filters are applied on the incoming request to the server.
-                If all filters for a prepared response matches, that response is sent back as answer to the request,
-            </p>
-            <p>
-                If no filters are given, the server responds with the prepared response unless internal paths ('/api', '/admin') are encountered in the incoming request.
-            </p>
-            <p>
-                If several prepared responses matches the filters the first applicable one is sent.
-            </p>
-            <p>
-                The following filters are implemented:
-            </p>
-            <ul>
-                <li><b>Request body contains string</b> (if the request body contains the given string, the response is sent)</li>
-                <li><b>Request body regex match</b> (if the request body matches the given pattern, the response is sent)</li>
-                <li><b>URL End-point equals</b> (if the request URL path equals the given string, the response is sent)</li>
-                <li><b>Header exist</b> (if the request has a header with a name that equals the given string, the response is sent)</li>
-                <li><b>Header value</b> (if the request body contains the given header, equal in both name and value, the response is sent)</li>
-                <li><b>Origin URL host equals</b> (if the request Origin header matches, the response is sent)</li>
-            </ul>
-        </div>
-    </div>
-    <div class="section">
-        <h2>API</h2>
-        <p>
-            The API is accessed by endpoint '/api' to this server. There are a few tricky ways of using this:
-        </p>
-        <br />
-        <h3>POST anything to the API to set next response</h3>
-        <p>
-            POSTing something to the API that doesn't fulfill the object structure of a prepared statement will make the API interprete the POSTed body content as the next body content to supply as a prepared response body.
-        </p>
-        <p>
-            Since the filter used for this POSTed body will be NextResponse it will only be sent once (and not sent at all if end-point '/admin' or '/api' are requested).
-        </p>
-        <p>
-            As an example; if the following POST was performed, the next HTTP request to the server would result in a response with the body content 'username=damberg&password=topsecret'.
-        </p>
-        <pre class="cmd">
-
-curl -X POST -d "username=damberg&password=topsecret" http://localhost:8089/api
-        </pre>
-        <br />
-        <h3>GET</h3>
-        <p>
-            A get request to the '/api' end-point returns all registered prepared responses.
-        </p>
-        <br />
-        <h3>DELETE</h3>
-        <p>
-            A DELETE request should have a JSON body stating what PreparedHttpResponse id to remove.
-        </p>
-        <p>
-            Body example:
-        </p>
-        <pre class="json">
-
-{"id":"ae037e4c-3132-4a9b-a2fb-70e30160ff42"}
-        </pre>
-        <p>
-            Or, with curl:
-        </p>
-        <pre class="cmd">
-
-curl -X POST -d "{'id':'ae037e4c-3132-4a9b-a2fb-70e30160ff42'}" http://localhost:8089/api
-        </pre>
-        <br />
-        <h3>POSTing full PreparedHttpResponses</h3>
-        <p>
-            This web page for example uses a more complex structure for POSTing new PreparedHttpResponses.
-        </p>
-        <p>
-            For details on how to use this file, a Swagger file is included in the resources of this server jar file (open as a zip file and browse to the resources).
-        </p>
-    </div>
-    <div class="section">
-        <h2>Notes</h2>
-        <p>
-            This utility is built with extendability in mind. It should(tm) be able to incorporate other technologies, apart from the HTTP protocol, as well.
-        </p>
-        <br />
-        <h3>List of future improvement ideas</h3>
-        <ul>
-            <li>Enable editing of prepared responses</li>
-            <li>Enable editing of headers lists</li>
-            <li>Refactor HTML/JS/CSS code heavily</li>
-            <li>Make MQ stubbing work properly</li>
-            <li>Expand the body options to include possiblities to modify the prepared response body at runtime, for timestamps and more</li>
-            <li>Prettify the XML or JSON data.</li>
-            <li>Test with OpenJRE</li>
-            <li>Verifications - API to query server side to assert incoming request</li>
-            <li>Fix bug so you shouldn't have to refresh page after DELETE</li>
-            <li>Create more tests for ease of changes</li>
-            <li>Check if HTML formatted prepared response bodies manages less-than and more-than correct server-side (especially for recorded messages)</li>
-        </ul>
-    </div>
-</div>
-
-<div class="tablinksbar">
-    <button id="httpButton" class="tablink" onclick="setActiveTab(document.getElementById('registeredresponses').innerHTML, 'httpButton');">HTTP / REST</button>
-    <button id="mqButton" class="tablink" onclick="setActiveTab(document.getElementById('mqcontent').innerHTML, 'mqButton');">MQ / JMS</button>
-    <button id="infoButton" class="tablink" onclick="setActiveTab(document.getElementById('help').innerHTML, 'infoButton');">Info / Help</button>
-</div>
-<div id="tabcontent">
-
-</div>
-<div id='registeredresponses'>
-    <h2>Registered prepared responses</h2>
-    <table id="registeredResponsesTable">
-        <tr>
-            <th>Trigger(s)</th>
-            <th>Header(s)</th>
-            <th>Body</th>
-            <th>Status code</th>
-            <th>Delay (ms)</th>
-            <th></th>
-        </tr>
-    </table>
-    <button id="addPreparedResponse" onclick="addPreparedResponse()">Add...</button>
-    <button id="test" onclick="openClient()">Test...</button>
-</div>
-<div id='new' class="overlay">
-    <h2>Register new prepared response</h2>
-    <div>
-        <h3>Response to send</h3>
-        <button id="recordButton" onclick="document.getElementById('recordClient').style.display = 'block';">Record...</button>
-
-
-
-
-
-
-
-        <div id="recordClient" class="overlay">
-            <script>
-        var clientheaders = [];
-        function clientaddheader(){
-            var name = document.getElementById('clientresponseheadername').value;
-            var value = document.getElementById('clientresponseheadervalue').value;
-            if(name === null || name.length > 0)return;
-            var header = {};
-            header.name = name;
-            header.value = value;
-            clientheaders.push(header);
-            document.getElementById('clientheaders').innerHTML += name + ": " + value + "<br>";
-        }
-
-        function saveAsPreparedResponse(){
-            document.getElementById("responsebodycontent").value = document.getElementById('recordresponsebodyvalue').innerHTML;
-            document.getElementById("bodycontenttypedropdown").value = "direct";
-            document.getElementById("responsecode").value = document.getElementById('recordstatuscodevalue').innerHTML;
-            document.getElementById('recordClient').style.display = 'none';
-        }
-
-        function sendrecordrequest(){
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    document.getElementById('saverecordedbutton').disabled = false;
-                    document.getElementById('clearrecordedresponsebutton').disabled = false;
-                    document.getElementById('recordresponsebodyvalue').innerHTML = textToHtml(this.responseText);
-                    document.getElementById('recordstatuscodevalue').innerHTML = this.status;
-                }
-            };
-            xhttp.open(document.getElementById('recordmethod').value, "/sgsdfjfdsfgf", false);
-            xhttp.setRequestHeader('ServiceVirtualizationForward', document.getElementById('recordendpoint').value);
-            xhttp.send(document.getElementById('recordbody').value);
-        }
-
-        function clearreceivedrecordresponse(){
-            document.getElementById('recordresponseheaders').innerHTML = '';
-            document.getElementById('recordstatuscodevalue').innerHTML = '';
-            document.getElementById('recordresponsebodyvalue').innerHTML = '';
-            document.getElementById('saverecordedbutton').disabled = true;
-            document.getElementById('clearrecordedresponsebutton').disabled = true;
-        }
-
-    </script>
-            <h2>HTTP record client</h2>
-            <div>
-                <h3>Request</h3>
-                <label for="recordendpoint">URL: </label>
-                <input id="recordendpoint" type="text" value="http://">
-                <label for="recordmethod">Method:</label>
-                <input id="recordmethod" type="text" value="GET">
-                <label for="recordbody">Body</label>
-                <textarea id="recordbody"></textarea>
-                Headers:<br>
-                <span id="recordheaders"></span>
-                <label for='recordresponseheadername'>Header name</label>
-                <input type='text' id='recordresponseheadername'><br>
-                <label for='recordresponseheadervalue'>Header value</label>
-                <input type='text' id='recordresponseheadervalue'><br>
-                <button id='recordaddheaderbutton' onclick='recordaddheader()'>Add header</button>
-                <button id="recordsendbutton" onclick="sendrecordrequest()">Send</button>
-            </div>
-            <div>
-                <h3>Response</h3>
-                <p id="recordstatuscode">
-                    <span id="recordstatuscodelabel">Response status code: </span>
-                    <span class="responsevalue" id="recordstatuscodevalue"></span>
+            <div id='registeredresponses'>
+                <h1>HTTP stubbing</h1>
+                <h2>Registered prepared responses</h2>
+                <p>
+                    Use-cases for prepared HTTP responses include stubbing external systems as well as verification of outbound messages.
                 </p>
                 <p>
-                    <span>Headers:</span>
-                    <span id="recordresponseheaders"></span>
+                    These prepared responses are currently registered with this server:
                 </p>
-                <p id="recordresponsebody">
-                    <span>Body:<br></span>
-                <pre class="responsevalue" id="recordresponsebodyvalue"></pre>
-                </p>
-                <button id="clearrecordedresponsebutton" onclick="clearreceivedrecordresponse()" disabled>Clear</button>
-                <button id="saverecordedbutton" onclick="saveAsPreparedResponse()" disabled>Transfer to add dialogue and close</button>
+                <div id="registeredHttpResponses"></div>
+                <button id="addPreparedResponse" onclick="new Overlay('Add prepared HTTP response', new RegisterPreparedHttpResponse().rootElement, this);">Add prepared response...</button>
+                <button id="test" onclick="new Overlay('Test response', new HTTPClientOverlay().rootElement, this);">Test...</button>
+                
+                <br />
+
+                <h2>Stub server HTTP behavior</h2>
+                <label for="passthrough">Pass through to background server if no prepared response matches</label>
+                <input type="checkbox" id="passthrough">
+                <br />
+                <label for="backgroundserveraddress">Background server address:</label>
+                <input type="text" value="" id="backgroundserveraddress">
+                <br />
             </div>
-            <button id="closerecorderbutton" onclick="document.getElementById('recordClient').style.display = 'none';">Cancel</button>
+
+            <span id='status'></span>
         </div>
+    </section>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <div id='responsecodesection'>
-            <h4>Advanced</h4>
-            <label for='responsecode'>Response code for registered response:</label>
-            <input id="responsecode" type="number" value=200>
-            <label for='delay'>Server side response delay (ms):</label>
-            <input id="delay" type="number" value=0>
+    <section id="httpEdit">
+        <div id="httpEditDisplay" class="additiongui" style="display: none;">
+            <h1>Edit prepared HTTP response</h1>
+            <div>
+                <span>id:</span><span id="editHttpId"></span>
+            </div>
+            <div>HTTP body:</div>
+            <textarea id="editHttpBody"></textarea>
+            <button onclick="document.getElementById('httpEditDisplay').style.display = 'none';">Close</button>
         </div>
-        <div id='responsebody'>
-            <h4>Response body content</h4>
-            <select id="bodycontenttypedropdown">
-                <option value="direct">Direct input</option>
-                <option value="file">File read by server at runtime</option>
-            </select>
-            <textarea id="responsebodycontent" rows="5"></textarea>
+    </section>
 
-            <label id="bodycontentfilepathlabel" for="bodycontentfilepath"><br>Path to response content file (read at runtime by the service virtualization server):</label>
-            <input type="text" id="bodycontentfilepath">
+
+    <section id="mqdisplay" class="menuOptionDisplaySection">
+        <div class="section beige">
+            <h1>MQ/JMS stubbing</h1>
+            <div class="note">Terribly sorry, but the MQ functionality is not yet implemented to satisfaction. Sorry..!<br />Please check back later.</div>
+            <h3>Registered responses</h3>
+            <table id="registeredMqResponses">
+                <tr>
+                    <th>Response trigger</th>
+                    <th>Response delay (ms)</th>
+                    <th>Response content</th>
+                </tr>
+                <tr>
+                    <td>Topic: 'players'</td>
+                    <td>0</td>
+                    <td>[{'name':'elfvind', 'id': 25, 'score': 221}, {'name':'bengt', 'id': 26, 'score': 88}]</td>
+                </tr>
+            </table>
+            <button id="addPreparedMqResponse" onclick="new Overlay('Add prepared MQ response', (new MQResponseAdder()).rootElement, this).window;">Add...</button>
         </div>
-        <div id='responseheaders'>
-            <h4>Response headers</h4>
-            <div id='headervalues'></div>
-            <!--
-            <label for='reuserequestheaders'>Reuse applicable request headers in response:</label>
-            <input type="checkbox" id='reuserequestheaders'><br>
-            -->
-            <label for='responseheadername'>Header name</label>
-            <input type='text' id='responseheadername'><br>
-            <label for='responseheadervalue'>Header value</label>
-            <input type='text' id='responseheadervalue'><br>
-            <button id='addheaderbutton' onclick='addheader()'>Add</button>
-        </div>
-    </div>
-    <div id='responsefilters'>
-        <h3 class='tooltip'>Triggers for when to send this response<span class='tooltiptext'>All registered triggers for a prepared response need to be fullfilled for the registered response to be sent. If no trigger filter is applied the response will always be sent (if no other response are sent first).</span></h3>
-        <div id='registeredtriggers'></div>
-        <table id='triggertable'>
-            <tr class="noborder">
-                <td class="noborder">
-                    <select id='triggertype' >
-                        <option value='NextResponse'>Next response</option>
-                        <option value='OriginUrlFilter'>Origin URL</option>
-                        <option value='HttpMethodVerbFilter'>HTTP method verb</option>
-                        <option value='EndpointUrlFilter'>End-point path</option>
-                        <option value='HeaderExistsFilter'>Header exist</option>
-                        <option value='HeaderValueFilter'>Header value</option>
-                        <option value='TimePeriodFilter'>Time period</option>
-                        <option value='BodyRegexMatchFilter'>Body regular expression match</option>
-                        <option value='BodyContainsMatchFilter'>Body contains</option>
-                    </select>
-                    <br>
-                    <span id='triggertypedescription'></span>
-                </td>
-                <td class="noborder">
-                    <label id='field1label' for='field1'></label>
-                    <input id='field1' type='text'>
-                </td>
-                <td class="noborder">
-                    <label id='field2label' for='field2'></label>
-                    <input id='field2' type='text'>
-                </td>
-                <td class="noborder">
-                    <button id='addRequestFilter' onclick='addRequestFilter()'>Add</button>
-                </td>
-            </tr>
-        </table>
-        <br>
-    </div>
-    <button id='addfilter' onclick='submit()'>Submit</button>
-    <button id='cancelAddition'
-            onclick="reset()">Cancel</button>
-</div>
-<span id='status'></span>
-<div id="httpClient" class="overlay">
-    <script>
-        var clientheaders = [];
-        function clientaddheader(){
-            var name = document.getElementById('clientresponseheadername').value;
-            var value = document.getElementById('clientresponseheadervalue').value;
-            if(name === null || name.length > 0)return;
-            var header = {};
-            header.name = name;
-            header.value = value;
-            clientheaders.push(header);
-            document.getElementById('clientheaders').innerHTML += name + ": " + value + "<br>";
-        }
+    </section>
 
-        function showLastRequest(){
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    document.getElementById('clientperceivedrequest').innerHTML = textToHtml(this.responseText);
-                }
-            };
-            xhttp.open("GET", "/kgshfdlkgd", false);
-            xhttp.setRequestHeader('LastRequestProbe', 'Yes');
-            xhttp.send();
-        }
-
-        function clearreceivedresponse(){
-            document.getElementById('clientresponseheaders').innerHTML = '';
-            document.getElementById('clientperceivedrequest').innerHTML = '';
-            document.getElementById('clientstatuscodevalue').innerHTML = '';
-            document.getElementById('clientresponsebodyvalue').innerHTML = '';
-            document.getElementById('responsetime').innerHTML = '';
-        }
-
-        function sendclientrequest(){
-            var method = document.getElementById('clientmethod').value;
-            var body = document.getElementById('clientbody').value;
-            var endpoint = document.getElementById('clientendpoint').value;
-            if(method === null) {
-                document.getElementById('clientmethod').style.backgroundColor = 'red';
-                setTimeout(function(){
-                    document.getElementById('clientmethod').style.backgroundColor = 'white';
-                }, 200);
-                return;
-            }
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    document.getElementById('clientstatuscodevalue').innerHTML = this.status + " " + this.statusText;
-                    document.getElementById('clientresponsebodyvalue').innerHTML = textToHtml(this.responseText);
-                    var headers = this.getAllResponseHeaders();
-                    if(headers !== null) headers = headers.replace('\r\n', '<br>');
-                    document.getElementById('clientresponseheaders').innerHTML = headers;
-                }
-            };
-            for(var i = 0; i < clientheaders.length; i++){
-                xhttp.setRequestHeader(clientheaders[i].name, clientheaders[i].value);
-            }
-            xhttp.open(method, endpoint, false);
-            var startTime = new Date().getTime();
-            xhttp.send(body);
-            document.getElementById('responsetime').innerHTML = (+(new Date().getTime()) - +startTime) + " ms";
-            showLastRequest();
-        }
-    </script>
-    <h2>HTTP test client</h2>
-    <div>
-        <h3>Request</h3>
-        <label for="clientendpoint">End-point: </label>
-        <input id="clientendpoint" type="text" value="/test">
-        <label for="clientmethod">Method:</label>
-        <input id="clientmethod" type="text" value="GET">
-        <label for="clientbody">Body</label>
-        <textarea id="clientbody"></textarea>
-        Headers:<br>
-        <span id="clientheaders"></span>
-        <label for='clientresponseheadername'>Header name</label>
-        <input type='text' id='clientresponseheadername'><br>
-        <label for='clientresponseheadervalue'>Header value</label>
-        <input type='text' id='clientresponseheadervalue'><br>
-        <button id='clientaddheaderbutton' onclick='clientaddheader()'>Add header</button>
-        <button id="clientsendbutton" onclick="sendclientrequest()">Send</button>
-    </div>
-    <div>
-        <h3>Server side perceived request (as received)</h3>
-        <pre id="clientperceivedrequest"></pre>
-    </div>
-    <div>
-        <h3>Response</h3>
-        <p id="clientstatuscode">
-            <span id="clientstatuscodelabel">Response status code: </span>
-            <span class="responsevalue" id="clientstatuscodevalue"></span>
-            <br>
-            <span>Response time: </span><span id="responsetime"></span>
-        </p>
-        <p>
-            <span>Headers:</span>
-            <span id="clientresponseheaders"></span>
-        </p>
-        <p id="clientresponsebody">
-            <span>Body:<br></span>
-            <pre class="responsevalue" id="clientresponsebodyvalue"></pre>
-        </p>
-        <button onclick="clearreceivedresponse()">Clear</button>
-    </div>
-    <button id="closeclientbutton" onclick="document.getElementById('httpClient').style.display = 'none';">Close</button>
-</div>
-
-<div id="mqcontent">
-    <div>Terribly sorry, but the MQ functionality is not yet implemented to satisfaction. Sorry..!<br />Please check back later.</div>
-    <div id="mqresponseadder">
-        <h2>Message to send</h2>
-        <label for="mqbody">Message content:</label>
-        <textarea id="mqbody" value=""></textarea>
-        <br />
-        <h2>Filter (what triggers to send this message)</h2>
-        <label for="mqtopic">Topic:</label>
-        <input type="text" id="mqtopic" value="" />
-        <br />
-        <button onclick="addMqPreparedResponse();">Add</button>
-        <button onclick="document.getElementById('mqresponseadder').style.display = 'none';">Close</button>
-    </div>
-    <h3>Registered responses</h3>
-    <table id="registeredMQResponses">
-        <tr>
-            <th>Response trigger</th>
-            <th>Response delay (ms)</th>
-            <th>Response content</th>
-        </tr>
-        <tr>
-            <td>Topic: 'players'</td>
-            <td>0</td>
-            <td>[{'name':'elfvind', 'id': 25, 'score': 221}, {'name':'bengt', 'id': 26, 'score': 88}]</td>
-        </tr>
-    </table>
-    <button id="addMQResponse" onclick="document.getElementById('mqresponseadder').style.display = 'block';">Add...</button>
-</div>
 </body>
 
 </html>

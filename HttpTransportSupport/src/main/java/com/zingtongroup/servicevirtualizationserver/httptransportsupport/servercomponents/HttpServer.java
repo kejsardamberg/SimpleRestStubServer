@@ -1,8 +1,8 @@
 package com.zingtongroup.servicevirtualizationserver.httptransportsupport.servercomponents;
 
+import com.zingtongroup.servicevirtualizationserver.httptransportsupport.PropertiesManager;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.clientcomponents.HttpClient2;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.clientcomponents.HttpResponseInternal;
-import com.zingtongroup.servicevirtualizationserver.httptransportsupport.requestfilters.HeaderValueFilter;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.servicevirtualization.PreparedHttpResponse;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.servicevirtualization.RegisteredPreparedHttpResponses;
 import com.zingtongroup.servicevirtualizationserver.httptransportsupport.requestfilters.NextResponse;
@@ -45,6 +45,7 @@ public class HttpServer implements Runnable{
             RegisteredPreparedHttpResponses.getInstance().lastRequest = request;
             //Send sequence:
             sendAdminPageIfApplicable();
+            sendFileIfInResourceFolder();
             sendIpIfRequested();
             tendApiIfApplicable();
             forwardRequestIfAskedFor();
@@ -113,7 +114,7 @@ public class HttpServer implements Runnable{
     }
 
     private void sendIpIfRequested() throws IOException {
-        if(request.getUrl().toLowerCase().equals("/api/ip")){
+        if(request.getUrl().toLowerCase().equals(PropertiesManager.getPropertiesInstance().get("apiEndpointRootPath") + "/ip")){
             sent = true;
             send(request.getOriginUrl(), out, dataOut, null);
         }
@@ -153,8 +154,52 @@ public class HttpServer implements Runnable{
         return request;
     }
 
+    private List<String> getResourceFiles(String path) throws IOException {
+        List<String> filenames = new ArrayList<>();
+
+        try (
+                InputStream in = getResourceAsStream(path);
+                BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+            String resource;
+
+            while ((resource = br.readLine()) != null) {
+                filenames.add(resource);
+            }
+        }
+
+        return filenames;
+    }
+
+    private InputStream getResourceAsStream(String resource) {
+        final InputStream in
+                = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
+
+        return in == null ? getClass().getResourceAsStream(resource) : in;
+    }
+
+    private void sendFileIfInResourceFolder() throws IOException {
+        if(request.getUrl().length() < 1)return;
+        String filename = request.getUrl().substring(1);
+        InputStream is = getClass().getClassLoader().getResourceAsStream(filename);
+        if(is == null) return;
+        Map<String, String> headers = new HashMap<>();
+        if(filename.endsWith(".js")){
+            headers.put("Content-Type", "text/javascript");
+        } else if (filename.endsWith(".css")){
+            headers.put("Content-Type", "text/css");
+        } else if (filename.endsWith(".html") || filename.endsWith(".htm")){
+            headers.put("Content-Type", "text/html");
+        } else {
+            headers.put("Content-Type", "text/plain");
+        }
+        byte[] file = is.readAllBytes();
+        send(file, out, dataOut, headers);
+        sent = true;
+    }
+
+
     private void sendAdminPageIfApplicable() throws IOException {
-        if(request.getUrl().toLowerCase().equals("/admin")){
+        if(request.getUrl().toLowerCase().equals(PropertiesManager.getPropertiesInstance().get("adminGuiEndpoint"))){
             sendAdminPage(out, dataOut);
             sent = true;
         }
@@ -231,7 +276,8 @@ public class HttpServer implements Runnable{
 
     private void sendAnyRegisteredNextResponse() throws IOException, InterruptedException {
         if(!sent){
-            PreparedHttpResponse responseForRemoval = null;
+            Integer responseForRemoval = null;
+            int loopCounter = 0;
             for(PreparedHttpResponse preparedHttpResponse : RegisteredPreparedHttpResponses.getInstance().registeredResponses){
                 if(sent) break;
                 if(preparedHttpResponse.getFilters().stream().anyMatch(x -> x.getClass().isAssignableFrom(NextResponse.class))){
@@ -239,7 +285,8 @@ public class HttpServer implements Runnable{
                     preparedHttpResponse.setHttpRequestForResponse(request);
                     sendResponse(out, dataOut, preparedHttpResponse);
                     sent = true;
-                    responseForRemoval = preparedHttpResponse;
+                    responseForRemoval = loopCounter;
+                    loopCounter++;
                     break;
                 }
             }
@@ -250,7 +297,7 @@ public class HttpServer implements Runnable{
     }
 
     private void tendApiIfApplicable() throws IOException {
-        if(request.getUrl().toLowerCase().equals("/api")){
+        if(request.getUrl().toLowerCase().equals(PropertiesManager.getPropertiesInstance().get("apiEndpointRootPath"))){
             if(request.getVerb().equals("GET")){
                 sendRegistered(out, dataOut);
                 sent = true;
@@ -335,7 +382,7 @@ public class HttpServer implements Runnable{
         send(html, out, dataOut, headers);
     }
 
-    private void sendResponse(PrintWriter out, OutputStream dataOut, PreparedHttpResponse response) throws IOException, InterruptedException {
+     private void sendResponse(PrintWriter out, OutputStream dataOut, PreparedHttpResponse response) throws IOException, InterruptedException {
         byte[] fileData = null;
         if(response.delay != 0){
             Thread.sleep(response.delay);

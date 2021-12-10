@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="httpclientoverlay.js"></script>
+        <script src="htmlconversion.js"></script>
+        <script src="overlay.js"></script>
+        <script>
+            function init() {
+                
+            }
+        </script>
+    </head>
+    <body onload="init()">
+        <button onclick="new Overlay('Titel', (new HTTPClientOverlay()).rootElement, document.getElementById('btn'));" id="btn">Hej</button>
+    </body>
+</html>

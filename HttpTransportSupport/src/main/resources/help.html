@@ -1,0 +1,212 @@
+
+<meta charset="UTF-8">
+
+<style>
+    :root {
+        --zingtonRed: red;
+        --zingtonDarkBlue: #211E57;
+        --zingtonBeige: #EFEEE7;
+        --zingtonLightBeige: #FFFFFF;
+        --zingtonWhite: white;
+        --zingtonLightBlue: skyblue;
+    }
+
+    body {
+        margin-top: 100px;
+        color: var(--zingtonDarkBlue);
+        background-color: var(--zingtonBeige);
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .section {
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    .section.beige {
+        background-color: var(--zingtonBeige);
+    }
+
+    .section.lightBlue {
+        background-color: var(--zingtonLightBlue);
+    }
+
+    .section.lightBeige {
+        background-color: var(--zingtonLightBeige);
+    }
+
+    .ingress {
+        font-weight: bold;
+    }
+
+    pre.cmd {
+        background-color: black;
+        color: white;
+    }
+
+    pre.json {
+        background-color: black;
+        color: khaki;
+    }
+
+</style>
+
+<div class="section beige">
+    <h1>Zington Stub Server</h1>
+    <h2>Help, instructions, concept descriptions</h2>
+    <span class="version">Version 1.4.0</span><br>
+    <p class="ingress">
+        A system rarely stands on its own. It almost always have integrations to other systems.
+        When testing a system of your own it's easy to use mocks while running unit tests,
+        but when rising to system testing level you need the external systems to respond.
+        A problem with this is that you don't know if the external systems are in sync with you with their functionality,
+        and another challenge is that it's ofter cumbersome and hard to prepare data into the external systems so you can test your own system properly.
+        This is of course extra hard for negative testing, with rare error conditions.
+    </p>
+    <p class="ingress">
+        This utility is meant to be able to substitute any REST integration for your system, and any transport/data protocol in the future due to a plugin system.
+    </p>            
+</div>
+<div class="section lightBeige">
+    <h2>Terminology</h2>
+    <h3>Registered prepared responses</h3>
+    <p>
+        When registering new <b><i>Prepared Responses</i></b> they are combined with a set of <b><i>filters</i></b> for when to respond with that particular prepared response.
+    </p>
+    <br />
+    <h3>Prepared responses</h3>
+    <p>
+        This tool uses prepared responses. That is you tell this server what to respond when asked to respond.
+    </p>
+    <p>
+        Responses consist of headers, HTTP status code, and a body.
+    </p>
+    <br />
+    <h4>Body</h4>
+    <p>
+        The body is probably the most important part of any prepared response.
+        It's generally the common way of sending data between systems.
+    </p>
+    <p>
+        There are two types of body content references implemented:
+        One is by direct input.
+        This means that the given body content string will be handed out as body of the response.
+        The other is by file reference.
+        This enables to dynamically produce a file with the content being handed as response upon a request.
+        The file is read at runtime by the server utility, so it must be readable from the server
+        (given firewalls, file system user rights, path format and so forth).
+    </p>
+    <p>
+        The HTTP response body of this utility is a pure bitstream that is served as a string with no stated character encoding.
+    </p>
+    <br />
+    <h4>Headers</h4>
+    <p>
+        The HTTP headers of a response are simplified to only have one value per header.
+    </p>
+    <br />
+    <h4>Status code</h4>
+    <p>
+        Any HTTP response has a status code. Unless stated explicitly the status code is 200 (OK).
+        However, the status code may be set to whatever number you want it to be, for example 404.
+    </p>
+    <h3>Filters/triggers</h3>
+    <p>
+        To enable having multiple different prepared responses at the same time this utility uses a filtering mechanism.
+        These filters are applied on the incoming request to the server.
+        If all filters for a prepared response matches, that response is sent back as answer to the request,
+    </p>
+    <p>
+        If no filters are given, the server responds with the prepared response unless internal paths ('/api', '/admin') are encountered in the incoming request.
+    </p>
+    <p>
+        If several prepared responses matches the filters the first applicable one is sent.
+    </p>
+    <p>
+        The following filters are implemented:
+    </p>
+    <ul>
+        <li><b>Request body contains string</b> (if the request body contains the given string, the response is sent)</li>
+        <li><b>Request body regex match</b> (if the request body matches the given pattern, the response is sent)</li>
+        <li><b>URL End-point equals</b> (if the request URL path equals the given string, the response is sent)</li>
+        <li><b>Header exist</b> (if the request has a header with a name that equals the given string, the response is sent)</li>
+        <li><b>Header value</b> (if the request body contains the given header, equal in both name and value, the response is sent)</li>
+        <li><b>Origin URL host equals</b> (if the request Origin header matches, the response is sent)</li>
+    </ul>
+</div>
+<div class="section lightBlue">
+    <h2>API</h2>
+    <p>
+        The API is accessed by endpoint '/api' to this server. There are a few tricky ways of using this:
+    </p>
+    <br />
+    <h3>POST anything to the API to set next response</h3>
+    <p>
+        POSTing something to the API that doesn't fulfill the object structure of a prepared statement will make the API interprete the POSTed body content as the next body content to supply as a prepared response body.
+    </p>
+    <p>
+        Since the filter used for this POSTed body will be NextResponse it will only be sent once (and not sent at all if end-point '/admin' or '/api' are requested).
+    </p>
+    <p>
+        As an example; if the following POST was performed, the next HTTP request to the server would result in a response with the body content 'username=damberg&password=topsecret'.
+    </p>
+    <pre class="cmd">
+
+curl -X POST -d "username=damberg&password=topsecret" http://localhost:8089/api
+    </pre>
+    <br />
+    <h3>GET</h3>
+    <p>
+        A get request to the '/api' end-point returns all registered prepared responses.
+    </p>
+    <br />
+    <h3>DELETE</h3>
+    <p>
+        A DELETE request should have a JSON body stating what PreparedHttpResponse id to remove.
+    </p>
+    <p>
+        Body example:
+    </p>
+    <pre class="json">
+
+{"id":"ae037e4c-3132-4a9b-a2fb-70e30160ff42"}
+    </pre>
+    <p>
+        Or, with curl:
+    </p>
+    <pre class="cmd">
+
+curl -X POST -d "{'id':'ae037e4c-3132-4a9b-a2fb-70e30160ff42'}" http://localhost:8089/api
+    </pre>
+    <br />
+    <h3>POSTing full PreparedHttpResponses</h3>
+    <p>
+        This web page for example uses a more complex structure for POSTing new PreparedHttpResponses.
+    </p>
+    <p>
+        For details on how to use this file, a Swagger file is included in the resources of this server jar file (open as a zip file and browse to the resources).
+    </p>
+</div>
+<div class="section lightBeige">
+    <h2>Notes</h2>
+    <p>
+        This utility is built with extendability in mind. It should(tm) be able to incorporate other technologies, apart from the HTTP protocol, as well.
+    </p>
+    <br />
+    <h3>List of future improvement ideas</h3>
+    <ul>
+        <li>Enable editing of prepared responses</li>
+        <li>Enable editing of headers lists</li>
+        <li>Refactor HTML/JS/CSS code heavily</li>
+        <li>Make MQ stubbing work properly</li>
+        <li>Expand the body options to include possiblities to modify the prepared response body at runtime, for timestamps and more</li>
+        <li>Prettify the XML or JSON data.</li>
+        <li>Test with OpenJRE</li>
+        <li>Verifications - API to query server side to assert incoming request</li>
+        <li>Fix bug so you shouldn't have to refresh page after DELETE</li>
+        <li>Create more tests for ease of changes</li>
+        <li>Check if HTML formatted prepared response bodies manages less-than and more-than correct server-side (especially for recorded messages)</li>
+    </ul>
+</div>
