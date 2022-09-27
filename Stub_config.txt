@@ -1,51 +1,40 @@
 [ {
   "httpResponse" : {
     "responseCode" : 200,
-    "httpRequest" : {
-      "headers" : {
-        "Accept" : "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-        "Upgrade-Insecure-Requests" : "1",
-        "Connection" : "keep-alive",
-        "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36",
-        "Host" : "192.168.1.5:8089",
-        "DNT" : "1",
-        "Accept-Encoding" : "gzip, deflate",
-        "Accept-Language" : "sv-SE,sv;q=0.9,en-GB;q=0.8,en;q=0.7,en-US;q=0.6"
-      },
-      "verb" : "GET",
-      "url" : "/jj",
-      "body" : ""
-    },
-    "body" : "Ok",
+    "httpRequest" : null,
+    "body" : "Hello world",
     "bodyFilePath" : null,
     "uri" : null,
     "bodyType" : "direct",
-    "headers" : [ ]
+    "headers" : [ {
+      "name" : "Content-Type",
+      "value" : "text/plain"
+    } ]
   },
-  "id" : "eeed1c8d-0f7f-44db-9342-daa2ad68b8b0",
-  "delay" : 500,
+  "id" : "c157e5d4-cb1b-4a24-b2b1-23eb04bc6444",
+  "delay" : 0,
   "filters" : [ {
-    "field1" : "/jj",
-    "field2" : "",
+    "field1" : "/test",
+    "field2" : null,
     "type" : "EndpointUrlFilter",
-    "description" : "End-point equals '/jj'"
+    "description" : "End-point equals '/test'"
   } ]
 }, {
   "httpResponse" : {
     "responseCode" : 200,
     "httpRequest" : null,
-    "body" : "Dampan",
-    "bodyFilePath" : null,
-    "uri" : null,
+    "body" : "Test",
+    "bodyFilePath" : "",
+    "uri" : "",
     "bodyType" : "direct",
     "headers" : [ ]
   },
-  "id" : "ed5ff4e2-49f0-4639-8538-65ca9bf85e49",
-  "delay" : 0,
+  "id" : "94b24196-c824-4ee8-80e5-67f88444b1ac",
+  "delay" : 200,
   "filters" : [ {
-    "field1" : "/jorgen",
+    "field1" : "/yay",
     "field2" : "",
     "type" : "EndpointUrlFilter",
-    "description" : "End-point equals '/jorgen'"
+    "description" : "End-point equals '/yay'"
   } ]
 } ]

@@ -184,7 +184,7 @@
                     These prepared responses are currently registered with this server:
                 </p>
                 <div id="registeredHttpResponses"></div>
-                <button id="addPreparedResponse" onclick="new Overlay('Add prepared HTTP response', new RegisterPreparedHttpResponse().rootElement, this);">Add prepared response...</button>
+                <button id="addPreparedResponse" onclick="new Overlay('Add prepared HTTP response', new RegisterPreparedHttpResponse(preparedStatement).rootElement, this);">Add prepared response...</button>
                 <button id="test" onclick="new Overlay('Test response', new HTTPClientOverlay().rootElement, this);">Test...</button>
                 
                 <br />

@@ -76,6 +76,7 @@ class RegisterPreparedHttpResponse {
         triggerTypeCell.classList.add('noborder');
         var triggerTypeSelect = document.createElement("select");
         triggerTypeSelect.id = 'triggertype';
+        this.triggerTypeSelect = triggerTypeSelect;
         triggerTypeCell.innerHTML = "<select id='triggertype' >";
         triggerTypeSelect.innerHTML += "<option value='NextResponse'>Next response</option>";
         triggerTypeSelect.innerHTML += "<option value='OriginUrlFilter'>Origin URL</option>";
@@ -125,7 +126,38 @@ class RegisterPreparedHttpResponse {
         triggerTable.appendChild(triggerFieldsRow);
 
         var submitButtonRow = document.createElement('tr');
-        submitButtonRow.innerHTML = "<td class='noborder'><button id='addRequestFilter' onclick='addRequestFilter()'>Add</button></td>";
+        //submitButtonRow.innerHTML = "<td class='noborder'><button id='addRequestFilter' onclick='addRequestFilter()'>Add</button></td>";
+        var submitButtonCell = document.createElement('td');
+        submitButtonCell.classList.add('noborder');
+        var submitButton = document.createElement('button');
+        submitButton.id = 'addRequestFilter';
+        submitButton.innerHTML = 'Add';
+        submitButton.addEventListener('click', function(){
+                var triggertype = document.getElementById('triggertype').value;
+                if(document.getElementById('field1').style.display == 'block' && document.getElementById('field1').value.length === 0) {
+                    document.getElementById('field1').style.backgroundColor = 'red';
+                    setTimeout(function(){
+                        document.getElementById('field1').style.backgroundColor = 'white';
+                    }, 200);
+                    return;
+                }
+                if(document.getElementById('field2').style.display == 'block' && document.getElementById('field2').value.length === 0) {
+                    document.getElementById('field2').style.backgroundColor = 'red';
+                    setTimeout(function(){
+                        document.getElementById('field2').style.backgroundColor = 'white';
+                    }, 200);
+                    return;
+                }
+                var filter = {};
+                filter.type = triggertype;
+                filter.field1 = document.getElementById('field1').value;
+                filter.field2 = document.getElementById('field2').value;
+                this.preparedStatement.filters.push(filter);
+                this.updateFilterList();
+            }.bind(this)
+        );
+        submitButtonCell.appendChild(submitButton);
+        submitButtonRow.appendChild(submitButtonCell);
         triggerTable.appendChild(submitButtonRow);
 
         filterPanel.appendChild(triggerTable);
@@ -137,7 +169,22 @@ class RegisterPreparedHttpResponse {
         
         var submitBtn = document.createElement('button');
         submitBtn.id = "addfilter";
-        submitBtn.onclick = "submit()";
+        submitBtn.addEventListener('click', function(){
+                if(!this.preparedStatement.httpResponse) this.preparedStatement.httpResponse = {};
+                if(document.getElementById('bodycontenttypedropdown').value == 'direct'){
+                    this.preparedStatement.httpResponse.body = htmlToText(document.getElementById('responsebodycontent').value);
+                    this.preparedStatement.httpResponse.bodyType = 'direct';
+                } else {
+                    this.preparedStatement.httpResponse.bodyFilePath = htmlToText(document.getElementById('bodycontentfilepath').value);
+                    this.preparedStatement.httpResponse.bodyType = 'file';
+                }
+                this.preparedStatement.httpResponse.responseCode = document.getElementById('responsecode').value;
+                this.preparedStatement.delay = document.getElementById('delay').value;
+                postToApi();
+                document.getElementById('new').style.display = 'none';
+                document.getElementById('addPreparedResponse').style.display = 'block';
+            }.bind(this)
+        );
         submitBtn.innerHTML = "Submit";
         marginElement.appendChild(submitBtn);
 

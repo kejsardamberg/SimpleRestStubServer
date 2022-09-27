@@ -17,7 +17,7 @@ import java.util.*;
 public class HttpServer implements Runnable{
 
     private Socket connect;// Client Connection via Socket Class
-    static final boolean verbose = true; //Logging level
+    static final int verbosityLevel = 1; //Logging level (0 = None, 1 = Non-admin, 2 = All)
     BufferedReader in = null;
     PrintWriter out = null;
     BufferedOutputStream dataOut = null;
@@ -38,21 +38,24 @@ public class HttpServer implements Runnable{
             out = new PrintWriter(connect.getOutputStream()); // we get character output stream to client (for headers)
             dataOut = new BufferedOutputStream(connect.getOutputStream()); // get binary output stream to client (for requested data)
             request = identifyRequest();
-            if (verbose) {
+
+            if (verbosityLevel == 2) {
                 System.out.println("Received request:" + System.lineSeparator() + request.toString());
             }
-            sendLastRequestIfAskedFor();
-            RegisteredPreparedHttpResponses.getInstance().lastRequest = request;
+
+            sendLastRequestIfAskedFor();      // For web client test dialog HTTP request display
+            RegisteredPreparedHttpResponses.getInstance().lastRequest = request; //Set this response as next response
+
             //Send sequence:
-            sendAdminPageIfApplicable();
-            sendFileIfInResourceFolder();
-            sendIpIfRequested();
-            tendApiIfApplicable();
-            forwardRequestIfAskedFor();
-            sendAnyRegisteredNextResponse();
-            sendMatchingRegisteredResponse();
-            sendUnFilteredPreparedResponse();
-            send404IfNothingSentSoFar();
+            sendAdminPageIfApplicable();      // The HTML admin page
+            sendFileIfInResourceFolder();     // The Admin HTML page resources like CSS, JS and other files
+            sendIpIfRequested();              // For Prepared Response filter
+            tendApiIfApplicable();            // If any PreparedHttpResponse is POSTed, UPDATEd, or DELETEd
+            forwardRequestIfAskedFor();       // For pass-through usage to external backend system
+            sendAnyRegisteredNextResponse();  // For the type of response where it is prepared by POSTing it as next request
+            sendMatchingRegisteredResponse(); // Sends any registered PreparedHttpResponse matching filters
+            sendUnFilteredPreparedResponse(); // Sends any registered PreparedHttpRespnse without filters
+            send404IfNothingSentSoFar();      // Fallback if nothing to send
 
         } catch (Exception ioe) {
             System.out.println("Server error : " + ioe);
@@ -66,7 +69,7 @@ public class HttpServer implements Runnable{
                 System.err.println("Error closing stream : " + e.getMessage());
             }
 
-            if (verbose) {
+            if (verbosityLevel >= 1) {
                 System.out.println("Connection closed.\n");
             }
         }
@@ -102,6 +105,9 @@ public class HttpServer implements Runnable{
 
     private void sendLastRequestIfAskedFor() throws IOException {
         if(request == null || request.getUrl() == null || request.getHeaders() == null) return;
+        if (verbosityLevel == 1) {
+            System.out.println("Received request:" + System.lineSeparator() + request.toString());
+        }
         if(request.getUrl().equals("//kgshfdlkgd")){
             for(String header : request.getHeaders().keySet()){
                 System.out.println("'" + header + "': '" + request.getHeaders().get(header) + "'");
@@ -111,6 +117,7 @@ public class HttpServer implements Runnable{
             sent = true;
             send(RegisteredPreparedHttpResponses.getInstance().lastRequest.toString(), out, dataOut, null);
         }
+
     }
 
     private void sendIpIfRequested() throws IOException {
@@ -207,6 +214,9 @@ public class HttpServer implements Runnable{
 
     private void send404IfNothingSentSoFar() {
         if(!sent) {
+            if (verbosityLevel == 1) {
+                System.out.println("Received request:" + System.lineSeparator() + request.toString());
+            }
             send404(out);
             sent = true;
         }
@@ -214,6 +224,9 @@ public class HttpServer implements Runnable{
 
     private void sendMatchingRegisteredResponse() throws IOException, InterruptedException {
         if(sent) return;
+        if (verbosityLevel == 1) {
+            System.out.println("Received request:" + System.lineSeparator() + request.toString());
+        }
         for(PreparedHttpResponse preparedHttpResponse : RegisteredPreparedHttpResponses.getInstance().registeredResponses){
             if(sent) break;
             if(preparedHttpResponse.filters.size() == 0) continue;
@@ -246,6 +259,9 @@ public class HttpServer implements Runnable{
 
     private void sendUnFilteredPreparedResponse() throws IOException, InterruptedException {
         if(sent) return;
+        if (verbosityLevel == 1) {
+            System.out.println("Received request:" + System.lineSeparator() + request.toString());
+        }
         for(PreparedHttpResponse preparedHttpResponse : RegisteredPreparedHttpResponses.getInstance().registeredResponses){
             if(sent) break;
             if(preparedHttpResponse.filters.size() != 0) continue;
@@ -276,6 +292,9 @@ public class HttpServer implements Runnable{
 
     private void sendAnyRegisteredNextResponse() throws IOException, InterruptedException {
         if(!sent){
+            if (verbosityLevel == 1) {
+                System.out.println("Received request:" + System.lineSeparator() + request.toString());
+            }
             Integer responseForRemoval = null;
             int loopCounter = 0;
             for(PreparedHttpResponse preparedHttpResponse : RegisteredPreparedHttpResponses.getInstance().registeredResponses){
@@ -297,6 +316,9 @@ public class HttpServer implements Runnable{
     }
 
     private void tendApiIfApplicable() throws IOException {
+        if (verbosityLevel == 1) {
+            System.out.println("Received request:" + System.lineSeparator() + request.toString());
+        }
         if(request.getUrl().toLowerCase().equals(PropertiesManager.getPropertiesInstance().get("apiEndpointRootPath"))){
             if(request.getVerb().equals("GET")){
                 sendRegistered(out, dataOut);

@@ -7,7 +7,7 @@ class HttpHeader {
 
 class HttpMessage {
     constructor(){
-        this.body = null;
+        this.body = "";
         this.headers = [];
     }
 }
@@ -33,16 +33,21 @@ class HttpResponse extends HttpMessage {
     }
 }
 
-class PreparedHttpResponse extends HttpResponse {
-    constructor(delayInMilliseconds){
-        super();
-        this.delayInMilliseconds = delayInMilliseconds;
+class PreparedHttpResponse{
+    constructor(){
+
         this.id = uuidv4();
-        this.httpResponse = {};
-        this.httpResponse.headers = [];
+        this.delay = 0;
         this.filters = [];
 
-    }    
+        this.httpResponse = {};
+        this.httpResponse.body = "";
+        this.httpResponse.headers = [];
+        this.httpResponse.responseCode = 200;
+        this.httpResponse.uri = "";
+        this.httpResponse.bodyType = "direct";
+        this.httpResponse.bodyFilePath = "";
+    }
 }
 
 function uuidv4() {

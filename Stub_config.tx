@@ -1,0 +1,35 @@
+[ {
+  "httpResponse" : {
+    "responseCode" : 200,
+    "httpRequest" : {
+      "headers" : {
+        "Accept" : "*/*",
+        "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0",
+        "Connection" : "keep-alive",
+        "Referer" : "http://192.168.1.10:8089/admin",
+        "Host" : "192.168.1.10:8089",
+        "Accept-Language" : "sv-SE,sv;q=0.8,en-US;q=0.5,en;q=0.3",
+        "Accept-Encoding" : "gzip, deflate"
+      },
+      "verb" : "GET",
+      "url" : "/test",
+      "body" : ""
+    },
+    "body" : "Hello world",
+    "bodyFilePath" : null,
+    "uri" : null,
+    "bodyType" : "direct",
+    "headers" : [ {
+      "name" : "Content-Type",
+      "value" : "text/plain"
+    } ]
+  },
+  "id" : "fcd6be2a-efcb-4a52-8089-37bbb42ab4f3",
+  "delay" : 0,
+  "filters" : [ {
+    "field1" : "/test",
+    "field2" : null,
+    "type" : "EndpointUrlFilter",
+    "description" : "End-point equals '/test'"
+  } ]
+} ]

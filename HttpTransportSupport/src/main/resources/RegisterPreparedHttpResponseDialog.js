@@ -173,12 +173,7 @@ class RegisteredPreparedHttpResponseDialog{
 
     setDefaultsIfNullOrUseAsIs(preparedStatementToView){
         if(preparedStatementToView == null){
-            preparedStatementToView = {};
-            preparedStatementToView.id = uuidv4();
-            preparedStatementToView.delay = 0;
-            preparedStatementToView.httpResponse = {};
-            preparedStatementToView.httpResponse.headers = [];
-            preparedStatementToView.filters = [];
+        preparedStatementToView = new PreparedHttpResponse();
         }
         return preparedStatementToView;
     }
