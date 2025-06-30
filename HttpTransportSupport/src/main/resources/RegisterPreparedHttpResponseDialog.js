@@ -102,10 +102,10 @@ class RegisteredPreparedHttpResponseDialog{
                 case 'TimePeriodFilter':
                     document.getElementById('field1').value = "";
                     document.getElementById('field2').value = "";
-                    document.getElementById('field1label').innerHTML = "Start time (HH:mm:SS):";
+                    document.getElementById('field1label').innerHTML = "Start time (HH:mm:ss):";
                     document.getElementById('field1label').style.display = 'block';
                     document.getElementById('field1').style.display = 'block';
-                    document.getElementById('field2label').innerHTML = "Stop time (HH:mm:SS):";
+                    document.getElementById('field2label').innerHTML = "Stop time (HH:mm:ss):";
                     document.getElementById('field2label').style.display = 'block';
                     document.getElementById('field2').style.display = 'block';
                     document.getElementById('triggertypedescription').innerHTML = 'Checks time (server side) for the incoming request. If current time is between given start time and stop time the registered response is sent.';

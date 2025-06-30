@@ -24,10 +24,10 @@ public class TimePeriodFilter extends HttpRequestFilter {
         Date startTime = null;
         Date stopTime = null;
         try{
-            startTime = new SimpleDateFormat("HH:mm:SS").parse(field1);
-            stopTime = new SimpleDateFormat("HH:mm:SS").parse(field2);
+            startTime = new SimpleDateFormat("HH:mm:ss").parse(field1);
+            stopTime = new SimpleDateFormat("HH:mm:ss").parse(field2);
         } catch (ParseException e) {
-            System.out.println("ERROR: Exception - Date parse exception. Expected time format: 'HH:mm:SS'");
+            System.out.println("ERROR: Exception - Date parse exception. Expected time format: 'HH:mm:ss'");
             return false;
         }
         if(startTime == null || stopTime == null) return false;
